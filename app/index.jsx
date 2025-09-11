@@ -1,12 +1,25 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, Touchable, TouchableOpacity, View } from "react-native";
 import { Image } from "expo-image";
 import { Link } from "expo-router";
+import { useAuthStore } from "../store/authStore";
+import { useEffect } from "react";
 export default function Index() {
+  const { user, token, checkAuth, logout } = useAuthStore();
+
+  console.log(user, token);
+
+  useEffect(() => {
+    checkAuth();
+  }, []);
+
   return (
     <View
       style={styles.container}
     >
-      <Text style={styles.title}>Hello</Text>
+      <TouchableOpacity onPress={logout}>
+        <Text>Logout</Text>
+      </TouchableOpacity>
+      <Text style={styles.title}>Hello {user?.username}</Text>
       <Image source={require("../assets/images/research.svg")} style={{ width: 100, height: 100 }} />
       <Link href="/(auth)/signup">Signup</Link>
       <Link href="/(auth)">Login</Link>
