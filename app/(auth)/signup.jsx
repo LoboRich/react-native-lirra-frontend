@@ -20,7 +20,7 @@ import { useAuthStore } from "../../store/authStore";
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
-    const { user, isLoading, register } = useAuthStore();
+    const { isLoading, register } = useAuthStore();
     const router = useRouter();
     
     const handleSignUp = async () => {
@@ -29,7 +29,7 @@ import { useAuthStore } from "../../store/authStore";
       if(!result.success) {
         Alert.alert("Error", result.error);
       }
-      if (result.success) router.push("/(auth)/login");
+      if (result.success) router.push("/(auth)");
     };
   
     return (
