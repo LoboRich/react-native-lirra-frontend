@@ -123,6 +123,22 @@ const styles = StyleSheet.create({
   footerLoader: {
     marginVertical: 20,
   },
+  searchContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#f1f1f1",
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    marginTop: 10,
+    marginBottom: 15,
+  },
+  searchInput: {
+    flex: 1,
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    fontSize: 14,
+    color: COLORS.textPrimary,
+  },  
 });
 
 export default styles;

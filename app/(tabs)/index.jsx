@@ -4,6 +4,8 @@ import {
     FlatList,
     ActivityIndicator,
     RefreshControl,
+    TextInput,
+    TouchableOpacity,
   } from "react-native";
   import { useAuthStore } from "../../store/authStore";
   
@@ -16,6 +18,7 @@ import {
   import { formatPublishDate } from "../../lib/utils";
   import COLORS from "../../constants/colors";
   import Loader from "../../components/Loader";
+  import ListHeader from "../../components/ListHeader";
   
   export const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
   
@@ -26,31 +29,35 @@ import {
     const [refreshing, setRefreshing] = useState(false);
     const [page, setPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
-  
+    const [searchQuery, setSearchQuery] = useState("");
+
     const fetchReadingMaterials = async (pageNum = 1, refresh = false) => {
       try {
         if (refresh) setRefreshing(true);
         else if (pageNum === 1) setLoading(true);
-  
-        const response = await fetch(`${API_URL}/reading-materials?page=${pageNum}&limit=2`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-  
+    
+        const response = await fetch(
+          `${API_URL}/reading-materials?page=${pageNum}&limit=5&search=${encodeURIComponent(
+            searchQuery
+          )}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+    
         const data = await response.json();
         if (!response.ok) throw new Error(data.message || "Failed to fetch reading materials");
-  
-        // todo fix it later
-        // setreadingMaterials((prevreadingMaterials) => [...prevreadingMaterials, ...data.readingMaterials]);
-  
+    
         const uniquereadingMaterials =
           refresh || pageNum === 1
             ? data.readingMaterials
-            : Array.from(new Set([...readingMaterials, ...data.readingMaterials].map((book) => book._id))).map((id) =>
+            : Array.from(
+                new Set([...readingMaterials, ...data.readingMaterials].map((book) => book._id))
+              ).map((id) =>
                 [...readingMaterials, ...data.readingMaterials].find((book) => book._id === id)
               );
-  
+    
         setreadingMaterials(uniquereadingMaterials);
-  
         setHasMore(pageNum < data.totalPages);
         setPage(pageNum);
       } catch (error) {
@@ -62,10 +69,20 @@ import {
         } else setLoading(false);
       }
     };
+    
   
     useEffect(() => {
         fetchReadingMaterials();
     }, []);
+
+    useEffect(() => {
+      const delayDebounce = setTimeout(() => {
+        fetchReadingMaterials(1, true);
+      }, 500); // 500ms delay after typing stops
+    
+      return () => clearTimeout(delayDebounce);
+    }, [searchQuery]);
+    
   
     const handleLoadMore = async () => {
       if (hasMore && !loading && !refreshing) {
@@ -115,9 +132,7 @@ import {
           onEndReached={handleLoadMore}
           onEndReachedThreshold={0.1}
           ListHeaderComponent={
-            <View style={styles.header}>
-              <Text style={styles.headerTitle}>Lirra</Text>
-            </View>
+            <ListHeader searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
           }
           ListFooterComponent={
             hasMore && readingMaterials.length > 0 ? (
