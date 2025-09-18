@@ -6,8 +6,8 @@ import COLORS from "../constants/colors";
 const ListHeader = ({ searchQuery, setSearchQuery }) => {
   return (
     <View style={{ paddingHorizontal: 16, paddingVertical: 12 }}>
-      <Text style={{ fontSize: 24, fontWeight: "700", marginBottom: 12, textAlign: "center" }}>
-        Lirra
+      <Text style={{ fontSize: 24, fontWeight: "700", marginBottom: 12, textAlign: "center", color: COLORS.textPrimary }}>
+        LIRRA
       </Text>
 
       {/* Search bar */}
