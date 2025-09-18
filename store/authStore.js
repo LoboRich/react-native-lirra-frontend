@@ -8,7 +8,7 @@ export const useAuthStore = create((set) => ({
     isLoading: false,
     isCheckingAuth: true,
     
-    register: async(username, email, password) => {
+    register: async(username, firstname, lastname, postnomials, college, email, password) => {
         set({isLoading: true});
 
         try{
@@ -17,7 +17,7 @@ export const useAuthStore = create((set) => ({
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({username, email, password})
+                body: JSON.stringify({username, firstname, lastname, postnomials, college, email, password})
             });
 
             const data = await response.json();
@@ -87,6 +87,7 @@ export const useAuthStore = create((set) => ({
     logout: async() => {
         await AsyncStorage.removeItem("user");
         await AsyncStorage.removeItem("token");
+        await AsyncStorage.removeItem("role");
         set({user: null, token: null});
     }
 

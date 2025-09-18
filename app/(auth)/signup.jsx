@@ -7,6 +7,7 @@ import {
     TouchableOpacity,
     ActivityIndicator,
     Alert,
+    ScrollView,
   } from "react-native";
   import styles from "../../assets/styles/signup.styles";
   import { Ionicons } from "@expo/vector-icons";
@@ -17,6 +18,10 @@ import { useAuthStore } from "../../store/authStore";
   
   export default function Signup() {
     const [username, setUsername] = useState("");
+    const [firstname, setFirstname] = useState("");
+    const [lastname, setLastname] = useState("");
+    const [postnomials, setPostnomials] = useState("");
+    const [college, setCollege] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
@@ -24,7 +29,7 @@ import { useAuthStore } from "../../store/authStore";
     const router = useRouter();
     
     const handleSignUp = async () => {
-      const result = await register(username, email, password);
+      const result = await register(username, firstname, lastname, postnomials, college, email, password);
 
       if(!result.success) {
         Alert.alert("Error", result.error);
@@ -37,7 +42,8 @@ import { useAuthStore } from "../../store/authStore";
         style={{ flex: 1 }}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
-        <View style={styles.container}>
+        <ScrollView contentContainerStyle={styles.container} style={styles.scrollViewStyle}>
+          
           <View style={styles.card}>
             {/* HEADER */}
             <View style={styles.header}>
@@ -65,6 +71,92 @@ import { useAuthStore } from "../../store/authStore";
                   />
                 </View>
               </View>
+
+              {/* POSTNOMIAL INPUT */}
+              <View style={styles.inputGroup}>
+                <Text style={styles.label}>Postnommials</Text>
+                <View style={styles.inputContainer}>
+                  <Ionicons
+                    name="ribbon-outline"
+                    size={20}
+                    color={COLORS.primary}
+                    style={styles.inputIcon}
+                  />
+                  <TextInput
+                    style={styles.input}
+                    placeholder="PhD"
+                    placeholderTextColor={COLORS.placeholderText}
+                    value={postnomials}
+                    onChangeText={setPostnomials}
+                    autoCapitalize="none"
+                  />
+                </View>
+              </View>
+
+              {/* FIRSTNAME INPUT */}
+              <View style={styles.inputGroup}>
+                <Text style={styles.label}>Firstname</Text>
+                <View style={styles.inputContainer}>
+                  <Ionicons
+                    name="person-outline"
+                    size={20}
+                    color={COLORS.primary}
+                    style={styles.inputIcon}
+                  />
+                  <TextInput
+                    style={styles.input}
+                    placeholder="John"
+                    placeholderTextColor={COLORS.placeholderText}
+                    value={firstname}
+                    onChangeText={setFirstname}
+                    autoCapitalize="none"
+                  />
+                </View>
+              </View>
+
+              {/* LASTNAME INPUT */}
+              <View style={styles.inputGroup}>
+                <Text style={styles.label}>Lastname</Text>
+                <View style={styles.inputContainer}>
+                  <Ionicons
+                    name="people-outline"
+                    size={20}
+                    color={COLORS.primary}
+                    style={styles.inputIcon}
+                  />
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Doe"
+                    placeholderTextColor={COLORS.placeholderText}
+                    value={lastname}
+                    onChangeText={setLastname}
+                    autoCapitalize="none"
+                  />
+                </View>
+              </View>
+
+              {/* COLLEGE SELECT */}
+              <View style={styles.inputGroup}>
+                <Text style={styles.label}>College</Text>
+                <View style={styles.inputContainer}>
+                  <Ionicons
+                    name="school-outline"
+                    size={20}
+                    color={COLORS.primary}
+                    style={styles.inputIcon}
+                  />
+                  <TextInput
+                    style={styles.input}
+                    placeholder="MIT"
+                    placeholderTextColor={COLORS.placeholderText}
+                    value={college}
+                    onChangeText={setCollege}
+                    autoCapitalize="none"
+                  />
+                </View>
+              </View>
+
+              
   
               {/* EMAIL INPUT */}
               <View style={styles.inputGroup}>
@@ -137,7 +229,7 @@ import { useAuthStore } from "../../store/authStore";
               </View>
             </View>
           </View>
-        </View>
+        </ScrollView>
       </KeyboardAvoidingView>
     );
   }

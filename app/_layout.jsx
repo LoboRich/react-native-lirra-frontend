@@ -3,36 +3,42 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import SafeScreen from "../components/SafeScreen";
 import { useAuthStore } from "../store/authStore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useFonts } from "expo-font";
 
-SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
   const router = useRouter();
   const segments = useSegments();
   const { checkAuth, user, token } = useAuthStore();
+  const [authChecked, setAuthChecked] = useState(false);
 
   const [fontsLoaded] = useFonts({
-    "JetBrainsMono-Medium": require("../assets/fonts/JetBrainsMono-Medium.ttf")
+    "JetBrainsMono-Medium": require("../assets/fonts/JetBrainsMono-Medium.ttf"),
   });
 
   useEffect(() => {
-    if(fontsLoaded) SplashScreen.hideAsync();
-  }, [fontsLoaded]);
-
-  useEffect(() => {
-    checkAuth();
+    const initAuth = async () => {
+      await checkAuth(); // assume this sets user/token
+      setAuthChecked(true);
+    };
+    initAuth();
   }, []);
 
+  // Redirect based on auth state
   useEffect(() => {
+    if (!authChecked) return;
+
     const inAuthScreen = segments[0] === "(auth)";
     const isSignedIn = Boolean(user && token);
 
     if (!isSignedIn && !inAuthScreen) router.replace("/(auth)");
     if (isSignedIn && inAuthScreen) router.replace("/(tabs)");
-    
-  }, [user, token, segments]);
-  
+  }, [user, token, segments, authChecked]);
+
+  if (!fontsLoaded || !authChecked) {
+    return null;
+  }
+
   return (
     <SafeAreaProvider>
       <SafeScreen>

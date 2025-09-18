@@ -9,6 +9,10 @@ const styles = StyleSheet.create({
     padding: 20,
     justifyContent: "center",
   },
+  scrollViewStyle: {
+    flex: 1,
+    backgroundColor: COLORS.background,
+  },
   card: {
     backgroundColor: COLORS.cardBackground,
     borderRadius: 16,
