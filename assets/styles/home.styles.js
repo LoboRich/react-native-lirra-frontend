@@ -138,7 +138,30 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     fontSize: 14,
     color: COLORS.textPrimary,
-  },  
+  },
+  voteSection: {
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    alignItems: "center",
+    marginTop: 8,
+  },
+  voteButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 20,
+    backgroundColor: "#f5f5f5",
+  },
+  voteButtonActive: {
+    backgroundColor: "#ffe6eb",
+  },
+  voteText: {
+    marginLeft: 6,
+    fontSize: 14,
+    fontWeight: "500",
+    color: COLORS.textPrimary,
+  },
 });
 
 export default styles;

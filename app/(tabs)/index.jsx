@@ -89,26 +89,73 @@ import {
         await fetchReadingMaterials(page + 1);
       }
     };
-  
+    
+    const handleVote = async (materialId) => {
+      try {
+        const response = await fetch(`${API_URL}/votes/${materialId}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+    
+        if (!response.ok) {
+          throw new Error("Failed to vote");
+        }
+    
+        const data = await response.json();
+    
+        setreadingMaterials((prev) =>
+          prev.map((m) =>
+            m._id === materialId
+              ? { ...m, hasVoted: data.voted, votesCount: data.votesCount }
+              : m
+          )
+        );
+      } catch (err) {
+        console.log("Vote error:", err);
+      }
+    };    
+    
     const renderItem = ({ item }) => (
       <View style={styles.bookCard}>
+        {/* Header: User info */}
         <View style={styles.bookHeader}>
           <View style={styles.userInfo}>
             <Image source={{ uri: item.user.profileImage }} style={styles.avatar} />
             <Text style={styles.username}>{item.user.username}</Text>
           </View>
         </View>
-  
+
+        {/* Book Image */}
         <View style={styles.bookImageContainer}>
           <Image source={item.image} style={styles.bookImage} contentFit="cover" />
         </View>
-  
+
+        {/* Book Details */}
         <View style={styles.bookDetails}>
           <Text style={styles.bookTitle}>{item.title}</Text>
           <Text style={styles.caption}>{item.caption}</Text>
           <Text style={styles.date}>Shared on {formatPublishDate(item.createdAt)}</Text>
         </View>
+
+        {/* Vote Section */}
+        <View style={styles.voteSection}>
+          <TouchableOpacity
+            style={[styles.voteButton, item.hasVoted && styles.voteButtonActive]}
+            onPress={() => handleVote(item._id)}
+          >
+            <Ionicons
+              name={item.hasVoted ? "heart" : "heart-outline"}
+              size={22}
+              color={item.hasVoted ? COLORS.primary : COLORS.textSecondary}
+            />
+            <Text style={styles.voteText}>{item.votesCount || 0}</Text>
+          </TouchableOpacity>
+        </View>
       </View>
+
     );
   
     if (loading) return <Loader />;
@@ -143,7 +190,7 @@ import {
             <View style={styles.emptyContainer}>
               <Ionicons name="book-outline" size={60} color={COLORS.textSecondary} />
               <Text style={styles.emptyText}>No recommendations yet</Text>
-              <Text style={styles.emptySubtext}>Be the first to share a book!</Text>
+              <Text style={styles.emptySubtext}>Be the first to share a recommendation!</Text>
             </View>
           }
         />
