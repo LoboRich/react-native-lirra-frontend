@@ -47,6 +47,7 @@ export default function TabLayout() {
             <Ionicons name="add-circle-outline" size={size} color={color} />
           ),
         }}
+        redirect={user?.role == 'admin'}
       />
 
       <Tabs.Screen
@@ -57,7 +58,18 @@ export default function TabLayout() {
             <Ionicons name="grid-outline" size={size} color={color} />
           ),
         }}
-        redirect={user?.role !== 'admin'}
+        redirect={user?.role == 'user'}
+      />
+
+      <Tabs.Screen
+        name="approved"
+        options={{
+          title: "For Procurement",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="hourglass-outline" size={size} color={color} />
+          ),
+        }}
+        redirect={user?.role == 'user'}
       />
       <Tabs.Screen
         name="profile"
@@ -67,6 +79,7 @@ export default function TabLayout() {
             <Ionicons name="person-outline" size={size} color={color} />
           ),
         }}
+        redirect={user?.role == 'admin'}
       />
     </Tabs>
   );
