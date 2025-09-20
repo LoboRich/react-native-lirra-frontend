@@ -2,10 +2,14 @@ import { Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import COLORS from "../../constants/colors";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useAuthStore } from "../../store/authStore";
 
 export default function TabLayout() {
   const insets = useSafeAreaInsets();
 
+  const { user} = useAuthStore();
+
+  console.log(user);
   return (
     <Tabs
       screenOptions={{
@@ -43,6 +47,17 @@ export default function TabLayout() {
             <Ionicons name="add-circle-outline" size={size} color={color} />
           ),
         }}
+      />
+
+      <Tabs.Screen
+        name="dashboard"
+        options={{
+          title: "Dashbboard",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="grid-outline" size={size} color={color} />
+          ),
+        }}
+        redirect={user?.role !== 'admin'}
       />
       <Tabs.Screen
         name="profile"
