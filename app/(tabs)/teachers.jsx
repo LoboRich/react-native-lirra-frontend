@@ -5,54 +5,35 @@ import TeachersListview from "../../components/TeachersListview";
 const teacherImage = "https://api.dicebear.com/7.x/avataaars/svg?seed=loborich"
 // sample data
 const teachers = [
-    {
-      id: "1",
-      fullname: "Prof. Alice Johnson",
-      image_url: teacherImage,
-      date_joined: "2021-08-12",
-    },
-    {
-      id: "2",
-      fullname: "Dr. Bob Smith",
-      image_url: teacherImage,
-      date_joined: "2020-05-03",
-    },
-    {
-      id: "3",
-      fullname: "Ms. Carol Lee",
-      image_url: teacherImage,
-      date_joined: "2022-01-25",
-    },
-    {
-      id: "4",
-      fullname: "Mr. Daniel Cruz",
-      image_url: teacherImage,
-      date_joined: "2019-11-10",
-    },{
-      id: "5",
-      fullname: "Prof. Alice Johnson",
-      image_url: teacherImage,
-      date_joined: "2021-08-12",
-    },
-    {
-      id: "6",
-      fullname: "Dr. Bob Smith",
-      image_url: teacherImage,
-      date_joined: "2020-05-03",
-    },
-    {
-      id: "7",
-      fullname: "Ms. Carol Lee",
-      image_url: teacherImage,
-      date_joined: "2022-01-25",
-    },
-    {
-      id: "8",
-      fullname: "Mr. Daniel Cruz",
-      image_url: teacherImage,
-      date_joined: "2019-11-10",
-    },
-  ];
+  {
+    id: "1",
+    name: "Prof. Alice Johnson",
+    joined: "2023-05-12",
+    department: "Mathematics",
+    image: "https://api.dicebear.com/7.x/avataaars/png?seed=alice",
+  },
+  {
+    id: "2",
+    name: "Dr. Bob Smith",
+    joined: "2022-11-03",
+    department: "Computer Science",
+    image: "https://api.dicebear.com/7.x/avataaars/png?seed=bob",
+  },
+  {
+    id: "3",
+    name: "Ms. Carol Lee",
+    joined: "2021-09-15",
+    department: "Physics",
+    image: "https://api.dicebear.com/7.x/avataaars/png?seed=carol",
+  },
+  {
+    id: "4",
+    name: "Ms. Jufran Doe",
+    joined: "2021-09-15",
+    department: "Physics",
+    image: "https://api.dicebear.com/7.x/avataaars/png?seed=john",
+  },
+];
   
 
 const Teachers = () => {

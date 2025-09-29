@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import { View, TextInput, Text, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import COLORS from "../constants/colors";
+import { Searchbar } from "react-native-paper";
+import styles from "../assets/styles/teachers.styles";
 
 const ListHeader = ({ searchQuery, setSearchQuery, title, description }) => {
   return (
-    <View style={{ paddingHorizontal: 16, paddingVertical: 12 }}>
+    <View style={styles.container}>
       <Text style={{ fontSize: 24, fontWeight: "700", marginBottom: 12, textAlign: "center", color: COLORS.textPrimary }}>
         {title}
       </Text>
@@ -14,39 +16,24 @@ const ListHeader = ({ searchQuery, setSearchQuery, title, description }) => {
       </Text>
 
       {/* Search bar */}
-      <View
+      <Searchbar
+        placeholder="Search..."
+        value={searchQuery}
+        onChangeText={setSearchQuery}
+        onClearIconPress={() => setSearchQuery("")}
         style={{
-          flexDirection: "row",
-          alignItems: "center",
-          backgroundColor: COLORS.inputBackground || "#f4faf5",
+          marginVertical: 10,
           borderRadius: 10,
-          paddingHorizontal: 12,
-          paddingVertical: 10,
+          backgroundColor: COLORS.inputBackground || "#f4faf5",
+          marginHorizontal: 10,
         }}
-      >
-        <Ionicons name="search-outline" size={20} color={COLORS.textSecondary} />
-        <TextInput
-          style={{
-            flex: 1,
-            marginLeft: 8,
-            fontSize: 18,
-            color: COLORS.textPrimary,
-          }}
-          placeholder="Search materials..."
-          placeholderTextColor={COLORS.textSecondary}
-          value={searchQuery}
-          onChangeText={setSearchQuery}
-        />
-        {searchQuery.length > 0 && (
-          <TouchableOpacity onPress={() => setSearchQuery("")}>
-            <Ionicons
-              name="close-circle"
-              size={20}
-              color={COLORS.textSecondary}
-            />
-          </TouchableOpacity>
-        )}
-      </View>
+        inputStyle={{
+          fontSize: 16,
+          color: COLORS.textPrimary,
+        }}
+        iconColor={COLORS.textSecondary}
+        placeholderTextColor={COLORS.textSecondary}
+      />
     </View>
   );
 };
