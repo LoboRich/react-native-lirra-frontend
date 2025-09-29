@@ -1,96 +1,112 @@
-import React from 'react';
-import { View, Text, Dimensions, ScrollView, StyleSheet } from 'react-native';
-import { LineChart, BarChart } from 'react-native-chart-kit';
-import styles from '../../assets/styles/dashboard.styles';
+import React from "react";
+import { View, ScrollView, Dimensions, StyleSheet } from "react-native";
+import { Card, Text } from "react-native-paper";
+import { LineChart, BarChart } from "react-native-chart-kit";
+import COLORS from "../../constants/colors";
+import styles from "../../assets/styles/dashboard.styles";
+
+const screenWidth = Dimensions.get("window").width;
+
+// --- sample/mock data ---
+const stats = {
+  totalMaterials: 124,
+  teachers: 18,
+  totalVotes: 392,
+};
+
+const lineChartData = {
+  labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+  datasets: [
+    {
+      data: [12, 25, 18, 40, 30, 50],
+      strokeWidth: 2,
+    },
+  ],
+};
+
+const barChartData = {
+  labels: ["Books", "E-books", "Multimedia", "Magazines"],
+  datasets: [
+    {
+      data: [45, 20, 30, 10],
+    },
+  ],
+};
 
 export default function Dashboard() {
-  const screenWidth = Dimensions.get('window').width
-
-  // --- Mock data ---
-  const stats = [
-    { id: '1', label: 'Pending', value: 1284, data: [50, 60, 90, 120, 100, 140, 160] },
-    { id: '2', label: 'For Procurement', value: 342, data: [10, 20, 30, 25, 40, 35, 45] },
-    { id: '3', label: 'Teachers', value: 12, data: [1, 0, 2, 1, 3, 2, 0] },
-  ];
-
-  const monthlyData = {
-    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
-    datasets: [
-      {
-        data: [300, 450, 400, 520, 480, 600, 700],
-      },
-    ],
-  };
-
-  const barData = {
-    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
-    datasets: [
-      {
-        data: [20, 45, 28, 80, 99],
-      },
-    ],
-  };
+  const CHART_WIDTH = Math.min(screenWidth - 32, 1000);
+  const CHART_HEIGHT = 220;
 
   const chartConfig = {
-    backgroundGradientFrom: '#ffffff',
-    backgroundGradientTo: '#ffffff',
+    backgroundGradientFrom: COLORS.cardBackground,
+    backgroundGradientTo: COLORS.cardBackground,
     decimalPlaces: 0,
-    color: (opacity = 1) => `rgba(34, 197, 94, ${opacity})`,
-    labelColor: (opacity = 1) => `rgba(107, 114, 128, ${opacity})`,
+    color: (opacity = 1) => COLORS.primary,
+    labelColor: (opacity = 1) => COLORS.textSecondary,
     propsForDots: {
-      r: '3',
-      strokeWidth: '1',
-      stroke: '#10B981',
+      r: "4",
+      strokeWidth: "2",
+      stroke: COLORS.primary,
     },
   };
 
   return (
-    <ScrollView style={styles.container}>
-        <Text style={styles.header}>Dashboard</Text>
-        <View style={styles.statsHeader}>
-            {/* Cards row */}
-            <View style={styles.cardsRow}>
-                {stats.map((s, index) => (
-                    <View
-                    key={s.id}
-                    style={[styles.card, index < stats.length - 1 && { marginRight: 12 }]} // spacing between cards
-                    >
-                        <Text style={styles.cardLabel}>{s.label}</Text>
-                        <Text style={styles.cardValue}>{s.value}</Text>
-                    </View>
-                ))}
-            </View>
-        </View>
-      <View style={styles.card}>
-            {/* Large charts */}
-            <View style={styles.chartContainer}>
-                <Text style={styles.chartTitle}>Recommendations</Text>
-                <LineChart
-                    data={monthlyData}
-                    width={screenWidth}
-                    height={220}
-                    chartConfig={chartConfig}
-                    bezier
-                    style={styles.chart}
-                />
-            </View>
+    <ScrollView contentContainerStyle={styles.container}>
+      {/* Stats row */}
+      <View style={styles.statsRow}>
+        <Card style={styles.statCard}>
+          <Card.Content style={styles.statCardContent}>
+            <Text style={styles.statNumber}>{stats.totalMaterials}</Text>
+            <Text style={styles.statLabel}>Total Materials</Text>
+          </Card.Content>
+        </Card>
 
-            <View style={styles.chartContainer}>
-                <Text style={styles.chartTitle}>Approved Recommendations</Text>
-                <BarChart
-                    data={barData}
-                    width={screenWidth}
-                    height={220}
-                    chartConfig={{
-                    ...chartConfig,
-                    color: (opacity = 1) => `rgba(14,165,233, ${opacity})`,
-                    }}
-                    style={styles.chart}
-                    fromZero
-                    showValuesOnTopOfBars
-                />
-            </View>
+        <Card style={styles.statCard}>
+          <Card.Content style={styles.statCardContent}>
+            <Text style={styles.statNumber}>{stats.teachers}</Text>
+            <Text style={styles.statLabel}>Teachers</Text>
+          </Card.Content>
+        </Card>
+
+        <Card style={styles.statCard}>
+          <Card.Content style={styles.statCardContent}>
+            <Text style={styles.statNumber}>{stats.totalVotes}</Text>
+            <Text style={styles.statLabel}>Total Votes</Text>
+          </Card.Content>
+        </Card>
       </View>
+
+      {/* Line chart */}
+      <Card style={styles.chartCard}>
+        <Card.Content>
+          <Text style={styles.chartTitle}>Materials Over Time</Text>
+          <LineChart
+            data={lineChartData}
+            width={CHART_WIDTH}
+            height={CHART_HEIGHT}
+            chartConfig={chartConfig}
+            bezier
+            style={styles.chart}
+            withInnerLines={false}
+          />
+        </Card.Content>
+      </Card>
+
+      {/* Bar chart */}
+      <Card style={styles.chartCard}>
+        <Card.Content>
+          <Text style={styles.chartTitle}>Materials by Type</Text>
+          <BarChart
+            data={barChartData}
+            width={CHART_WIDTH}
+            height={CHART_HEIGHT}
+            chartConfig={chartConfig}
+            style={styles.chart}
+            showValuesOnTopOfBars
+            fromZero
+          />
+        </Card.Content>
+      </Card>
     </ScrollView>
   );
 }

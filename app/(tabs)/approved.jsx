@@ -11,14 +11,13 @@ import {
   
   import { Image } from "expo-image";
   import { useEffect, useState } from "react";
-  
-  import styles from "../../assets/styles/home.styles";
   import { API_URL } from "../../constants/api";
   import { Ionicons } from "@expo/vector-icons";
   import { formatPublishDate } from "../../lib/utils";
   import COLORS from "../../constants/colors";
   import Loader from "../../components/Loader";
   import ListHeader from "../../components/ListHeader";
+  import styles from "../../assets/styles/for-procurement.styles";
   
   export const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
   
@@ -90,30 +89,40 @@ import {
       }
     };  
     
+    // inside Approved.js
     const renderItem = ({ item }) => (
       <View style={styles.bookCard}>
-        {/* Header: User info */}
-        <View style={styles.bookHeader}>
+        {/* Left: Image */}
+        <Image
+          source={item.image}
+          style={styles.bookImage}
+          contentFit="cover"
+        />
+    
+        {/* Right: Details */}
+        <View style={styles.bookDetails}>
+          {/* User Info */}
           <View style={styles.userInfo}>
-            <Image source={{ uri: item.user.profileImage }} style={styles.avatar} />
             <Text style={styles.username}>{item.user.username}</Text>
           </View>
-        </View>
-
-        {/* Book Image */}
-        <View style={styles.bookImageContainer}>
-          <Image source={item.image} style={styles.bookImage} contentFit="cover" />
-        </View>
-
-        {/* Book Details */}
-        <View style={styles.bookDetails}>
-          <Text style={styles.bookTitle}>{item.title}</Text>
-          <Text style={styles.caption}>{item.caption}</Text>
-          <Text style={styles.date}>Shared on {formatPublishDate(item.createdAt)}</Text>
+    
+          {/* Title + Caption */}
+          <Text style={styles.bookTitle} numberOfLines={1}>
+            {item.title}
+          </Text>
+          <Text style={styles.caption} numberOfLines={2}>
+            {item.caption}
+          </Text>
+    
+          {/* Date */}
+          <Text style={styles.date}>
+            Shared on {formatPublishDate(item.createdAt)}
+          </Text>
         </View>
       </View>
-
     );
+    
+
   
     if (loading) return <Loader />;
   
