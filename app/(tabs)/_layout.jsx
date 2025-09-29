@@ -71,6 +71,18 @@ export default function TabLayout() {
         }}
         redirect={user?.role == 'user'}
       />
+
+      <Tabs.Screen
+        name="teachers"
+        options={{
+          title: "Teachers",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="people-outline" size={size} color={color} />
+          ),
+        }}
+        redirect={user?.role == 'user'}
+      />
+
       <Tabs.Screen
         name="profile"
         options={{

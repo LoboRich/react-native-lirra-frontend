@@ -3,11 +3,14 @@ import { View, TextInput, Text, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import COLORS from "../constants/colors";
 
-const ListHeader = ({ searchQuery, setSearchQuery }) => {
+const ListHeader = ({ searchQuery, setSearchQuery, title, description }) => {
   return (
     <View style={{ paddingHorizontal: 16, paddingVertical: 12 }}>
       <Text style={{ fontSize: 24, fontWeight: "700", marginBottom: 12, textAlign: "center", color: COLORS.textPrimary }}>
-        LIRRA
+        {title}
+      </Text>
+      <Text style={{ fontSize: 14, marginBottom: 12, textAlign: "center", color: COLORS.textDark }}>
+        {description}
       </Text>
 
       {/* Search bar */}

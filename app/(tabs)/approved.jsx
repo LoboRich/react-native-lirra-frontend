@@ -136,7 +136,7 @@ import {
           onEndReached={handleLoadMore}
           onEndReachedThreshold={0.1}
           ListHeaderComponent={
-            <ListHeader searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+            <ListHeader searchQuery={searchQuery} setSearchQuery={setSearchQuery} title={"For Procurement"} description={"Discover the best reading materials shared by our community."}/>
           }
           ListFooterComponent={
             hasMore && readingMaterials.length > 0 ? (

@@ -179,7 +179,7 @@ import {
           onEndReached={handleLoadMore}
           onEndReachedThreshold={0.1}
           ListHeaderComponent={
-            <ListHeader searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+            <ListHeader searchQuery={searchQuery} setSearchQuery={setSearchQuery} title={"LIRRA"} description={"Share your favorite materials with the community!"}/>
           }
           ListFooterComponent={
             hasMore && readingMaterials.length > 0 ? (
