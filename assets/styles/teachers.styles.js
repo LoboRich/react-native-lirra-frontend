@@ -14,20 +14,27 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   card: {
-    margin: 8,
-    flex: 1,
-    alignSelf: "center", // centers the card itself in its row/grid
+    backgroundColor: COLORS.cardBackground,
+    borderRadius: 12,
+    marginVertical: 8,
+    marginHorizontal: 12,
+    elevation: 2,
+    position: "relative",
   },
   content: {
-    flex: 1,
+    padding: 16,
     alignItems: "center",
-    justifyContent: "center",
-    textAlign: "center",
-
+  },
+  menuContainer: {
+    position: "absolute",
+    top: -10,
+    right: 0,
+    zIndex: 1,
   },
   name: {
-    marginTop: 10,
-    textAlign: "center",
+    color: COLORS.textPrimary,
+    fontWeight: "600",
+    marginTop: 8,
   },
   title: {
       fontSize: 16,
