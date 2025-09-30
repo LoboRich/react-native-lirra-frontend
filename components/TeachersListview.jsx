@@ -20,38 +20,39 @@ export default function TeachersGrid({itemList, value, setValue}) {
   const renderItem = ({ item }) => (
     <Card style={styles.card} key={item._id}>
       <Card.Content style={styles.content}>
-        {/* Absolute positioned menu button */}
-        <View style={styles.menuContainer}>
-          <Menu
-            visible={menuVisibleId === item._id}
-            onDismiss={closeMenu}
-            anchor={
-              <IconButton
-                icon="dots-horizontal"
-                size={22}
-                onPress={() => openMenu(item._id)}
+        {/* Show only when value is pending */}
+        {value === "pending" && (
+          <View style={styles.menuContainer}>
+            <Menu
+              visible={menuVisibleId === item._id}
+              onDismiss={closeMenu}
+              anchor={
+                <IconButton
+                  icon="dots-horizontal"
+                  size={22}
+                  onPress={() => openMenu(item._id)}
+                />
+              }
+            >
+              <Menu.Item
+                onPress={() => {
+                  onConfirm?.(item);
+                  closeMenu();
+                }}
+                title="Confirm"
+                leadingIcon="check-circle"
               />
-            }
-          >
-            <Menu.Item
-              onPress={() => {
-                onConfirm?.(item);
-                closeMenu();
-              }}
-              title="Confirm"
-              leadingIcon="check-circle"
-            />
-            <Menu.Item
-              onPress={() => {
-                onCancel?.(item);
-                closeMenu();
-              }}
-              title="Cancel"
-              leadingIcon="close-circle"
-            />
-          </Menu>
-        </View>
-
+              <Menu.Item
+                onPress={() => {
+                  onCancel?.(item);
+                  closeMenu();
+                }}
+                title="Cancel"
+                leadingIcon="close-circle"
+              />
+            </Menu>
+          </View>
+        )}
         {/* Avatar + Info */}
         <Avatar.Image
           size={60}
