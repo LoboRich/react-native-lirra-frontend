@@ -5,6 +5,28 @@ import SafeScreen from "../components/SafeScreen";
 import { useAuthStore } from "../store/authStore";
 import { useEffect, useState } from "react";
 import { useFonts } from "expo-font";
+import COLORS from "../constants/colors";
+import { Provider as PaperProvider } from "react-native-paper";
+import { MD3LightTheme as DefaultTheme } from "react-native-paper";
+
+const theme = {
+  ...DefaultTheme,
+  roundness: 12,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: COLORS.primary,
+    onPrimary: COLORS.white,
+    background: COLORS.background,
+    surface: COLORS.cardBackground,
+    onSurface: COLORS.textPrimary,
+    secondary: COLORS.textSecondary,
+    onSecondary: COLORS.white,
+    outline: COLORS.border,
+    surfaceVariant: COLORS.inputBackground,
+    placeholder: COLORS.placeholderText,
+    text: COLORS.textPrimary,
+  },
+};
 
 export default function RootLayout() {
   const router = useRouter();
@@ -40,14 +62,16 @@ export default function RootLayout() {
   }
 
   return (
-    <SafeAreaProvider>
-      <SafeScreen>
-        <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="(tabs)" />
-          <Stack.Screen name="(auth)" />
-        </Stack>
-      </SafeScreen>
-      <StatusBar style="dark" />
-    </SafeAreaProvider>
+    <PaperProvider theme={theme}>
+      <SafeAreaProvider>
+        <SafeScreen>
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="(tabs)" />
+            <Stack.Screen name="(auth)" />
+          </Stack>
+        </SafeScreen>
+        <StatusBar style="dark" />
+      </SafeAreaProvider>
+    </PaperProvider>
   );
 }
