@@ -19,6 +19,7 @@ import {
   import COLORS from "../../constants/colors";
   import Loader from "../../components/Loader";
   import ListHeader from "../../components/ListHeader";
+import { Avatar } from "react-native-paper";
   
   export const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
   
@@ -119,11 +120,16 @@ import {
     };    
     
     const renderItem = ({ item }) => (
-      <View style={styles.bookCard}>
+      <View style={styles.bookCard} key={item._id}>
         {/* Header: User info */}
         <View style={styles.bookHeader}>
           <View style={styles.userInfo}>
             <Image source={{ uri: item.user.profileImage }} style={styles.avatar} />
+            {/* <Avatar.Image
+              size={36}
+              source={{ uri: item.user.profileImage }}
+              style={[styles.avatar, { backgroundColor: COLORS.primary }]}
+            /> */}
             <Text style={styles.username}>{item.user.username}</Text>
           </View>
         </View>
@@ -147,7 +153,7 @@ import {
             onPress={() => handleVote(item._id)}
           >
             <Ionicons
-              name={item.hasVoted ? "heart" : "heart-outline"}
+              name={item.hasVoted ? "thumbs-up" : "thumbs-up-outline"}
               size={22}
               color={item.hasVoted ? COLORS.primary : COLORS.textSecondary}
             />

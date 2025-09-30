@@ -7,16 +7,58 @@ import { Ionicons } from "@expo/vector-icons";
 import COLORS from "../constants/colors";
 import TeacherStatusSegments from "./TeacherStatus";
 import { formatPublishDate } from "../lib/utils";
+import { API_URL } from "../constants/api";
 
 const screenWidth = Dimensions.get("window").width;
 const cardWidth = (screenWidth - 40) / 2; // 2 cards per row with margin
 
-export default function TeachersGrid({itemList, value, setValue}) {
+export default function TeachersGrid({itemList, value, setValue, token}) {
   const [query, setQuery] = useState("");
   const [menuVisibleId, setMenuVisibleId] = useState(null); 
 
   const openMenu = (id) => setMenuVisibleId(id);
   const closeMenu = () => setMenuVisibleId(null);
+
+  const activateUser = async (userId) => {
+    try {
+      const res = await fetch(`${API_URL}/auth/${userId}/approve`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+  
+      if (!res.ok) throw new Error("Failed to activate user");
+  
+      const data = await res.json();
+      console.log("Activated:", data);
+      return data;
+    } catch (err) {
+      console.error(err);
+    }
+  };
+  
+  const deleteUser = async (userId) => {
+    try {
+      const res = await fetch(`${API_URL}/auth/${userId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+  
+      if (!res.ok) throw new Error("Failed to delete user");
+  
+      const data = await res.json();
+      console.log("Deleted:", data);
+      return data;
+    } catch (err) {
+      console.error(err);
+    }
+  };
+  
   const renderItem = ({ item }) => (
     <Card style={styles.card} key={item._id}>
       <Card.Content style={styles.content}>
@@ -35,20 +77,22 @@ export default function TeachersGrid({itemList, value, setValue}) {
               }
             >
               <Menu.Item
-                onPress={() => {
-                  onConfirm?.(item);
+                onPress={async () => {
+                  await activateUser(item._id);
                   closeMenu();
                 }}
-                title="Confirm"
+                title="Activate"
                 leadingIcon="check-circle"
               />
+
               <Menu.Item
-                onPress={() => {
-                  onCancel?.(item);
+                onPress={async () => {
+                  await deleteUser(item._id);
                   closeMenu();
                 }}
-                title="Cancel"
-                leadingIcon="close-circle"
+                title="Delete"
+                leadingIcon="delete"
+                titleStyle={{ color: "red" }}
               />
             </Menu>
           </View>
@@ -57,7 +101,7 @@ export default function TeachersGrid({itemList, value, setValue}) {
         <Avatar.Image
           size={60}
           source={{ uri: item.profileImage }}
-          style={{ backgroundColor: COLORS.primary }}
+          style={{ backgroundColor: COLORS.primary}}
         />
         <Text variant="titleMedium" style={styles.name}>
           {item.username}
@@ -71,7 +115,7 @@ export default function TeachersGrid({itemList, value, setValue}) {
   );
   return (
     <View style={styles.container}>
-      <ListHeader title="Teachers" description="List of teachers who have contributed to the community" searchQuery={query} setSearchQuery={setQuery} />
+      <Text style={styles.pagetitle}>Teachers</Text>
       <TeacherStatusSegments value={value} setValue={setValue}/>
       <FlatList
         data={itemList}
@@ -79,7 +123,7 @@ export default function TeachersGrid({itemList, value, setValue}) {
         renderItem={renderItem}
         numColumns={2}
         columnWrapperStyle={styles.row}
-        contentContainerStyle={{ paddingTop: 10, paddingBottom: 10 }}
+        contentContainerStyle={styles.listContainer}
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
             <Ionicons name="people-outline" size={60} color={COLORS.textSecondary} />

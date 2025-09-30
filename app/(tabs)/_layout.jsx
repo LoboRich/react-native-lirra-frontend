@@ -8,8 +8,6 @@ export default function TabLayout() {
   const insets = useSafeAreaInsets();
 
   const { user} = useAuthStore();
-
-  console.log(user);
   return (
     <Tabs
       screenOptions={{

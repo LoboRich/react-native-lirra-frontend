@@ -13,6 +13,17 @@ const styles = StyleSheet.create({
   row: {
     justifyContent: "space-between",
   },
+  listContainer: {
+    paddingTop: 10,
+    paddingBottom: 10,
+  },
+  pagetitle: {
+    fontSize: 24,
+    fontWeight: "700",
+    marginBottom: 12,
+    textAlign: "center",
+    color: COLORS.textPrimary
+  },
   card: {
     backgroundColor: COLORS.cardBackground,
     borderRadius: 12,

@@ -13,7 +13,7 @@ const theme = {
   };
 export default function TeacherStatusSegments({ value, setValue }) {
   return (
-    <View style={{ marginHorizontal: 10, marginTop: 50 }}>
+    <View style={{ marginHorizontal: 10 }}>
       <SegmentedButtons
         value={value}
         onValueChange={setValue}
@@ -34,16 +34,16 @@ export default function TeacherStatusSegments({ value, setValue }) {
             }
           },
           {
-            value: "all",
+            value: "allActive",
             label: "All",
             style: { 
               borderRadius: 8,
-              backgroundColor: value === "all" 
+              backgroundColor: value === "allActive" 
                 ? theme.colors.primary 
                 : theme.colors.surfaceVariant 
             },
             labelStyle: { 
-              color: value === "teachers" 
+              color: value === "allActive" 
                 ? theme.colors.onPrimary 
                 : theme.colors.onSurfaceVariant 
             }

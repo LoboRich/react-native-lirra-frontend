@@ -34,7 +34,7 @@ import { useAuthStore } from "../../store/authStore";
       if(!result.success) {
         Alert.alert("Error", result.error);
       }
-      if (result.success) router.push("/(auth)");
+      router.push("/(auth)");
     };
   
     return (

@@ -44,8 +44,6 @@ const Teachers = () => {
   const [teachers, setTeachers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [value, setValue] = useState("contributors");
-
-
   const fetchUsers = async () => {
     try {
       const res = await fetch(`${API_URL}/auth/${value}`, {
@@ -66,13 +64,12 @@ const Teachers = () => {
     fetchUsers();
   }, [value]);
 
-  console.log("teachers", teachers);
-
+  
   if (loading) return <ActivityIndicator size="large" style={{ marginTop: 50 }} />;
 
   return (
     <View style={styles.container}>
-      <TeachersListview itemList={teachers} value={value} setValue={setValue}/>
+      <TeachersListview itemList={teachers} value={value} setValue={setValue} token={token}/>
     </View>
   );
 };

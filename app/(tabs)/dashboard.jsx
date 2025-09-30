@@ -57,7 +57,7 @@ export default function Dashboard() {
         <Card style={styles.statCard}>
           <Card.Content style={styles.statCardContent}>
             <Text style={styles.statNumber}>{stats.totalMaterials}</Text>
-            <Text style={styles.statLabel}>Total Materials</Text>
+            <Text style={styles.statLabel}>Materials</Text>
           </Card.Content>
         </Card>
 
