@@ -23,6 +23,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     textAlign: "center",
+
   },
   name: {
     marginTop: 10,

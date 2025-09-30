@@ -6,39 +6,35 @@ import ListHeader from "./ListHeader";
 import { Ionicons } from "@expo/vector-icons";
 import COLORS from "../constants/colors";
 import TeacherStatusSegments from "./TeacherStatus";
+import { formatPublishDate } from "../lib/utils";
 
 const screenWidth = Dimensions.get("window").width;
 const cardWidth = (screenWidth - 40) / 2; // 2 cards per row with margin
 
-export default function TeachersGrid({itemList}) {
+export default function TeachersGrid({itemList, value, setValue}) {
+  let tempImage = "https://api.dicebear.com/7.x/avataaars/png?seed=loborich"
   const [query, setQuery] = React.useState("");
-
-  // Filter teachers by name or department
-  const filteredTeachers = itemList.filter(
-    (teacher) =>
-      teacher.name.toLowerCase().includes(query.toLowerCase()) ||
-      teacher.department.toLowerCase().includes(query.toLowerCase())
-  );
-
+  console.log(value)
   const renderItem = ({ item }) => (
-    <Card style={styles.card}>
+    <Card style={styles.card} key={item._id}>
       <Card.Content style={styles.content}>
-        <Avatar.Image size={60} source={{ uri: item.image }} />
+        {/* <Avatar.Image size={60} source={{ uri: item.profileImage}} /> */}
+        <Avatar.Image size={60} source={{ uri: tempImage}} style={{ backgroundColor: COLORS.primary}} />
         <Text variant="titleMedium" style={styles.name}>
-          {item.name}
+          {item.username}
         </Text>
-        <Text variant="bodyMedium">{item.department}</Text>
-        <Text variant="bodySmall">Joined: {item.joined}</Text>
+        <Text variant="bodyMedium">{item.college || "No college info"}</Text>
+        <Text variant="bodySmall">Joined: {formatPublishDate(item.createdAt)}</Text>
       </Card.Content>
     </Card>
   );
   return (
     <View style={styles.container}>
-      <ListHeader title="Teachers" description="List of teachers who have contributed to the community" searchQuery={""} setSearchQuery={""} />
-      <TeacherStatusSegments />
+      <ListHeader title="Teachers" description="List of teachers who have contributed to the community" searchQuery={query} setSearchQuery={setQuery} />
+      <TeacherStatusSegments value={value} setValue={setValue}/>
       <FlatList
-        data={filteredTeachers}
-        keyExtractor={(item) => item.id}
+        data={itemList}
+        keyExtractor={(item) => item._id}
         renderItem={renderItem}
         numColumns={2}
         columnWrapperStyle={styles.row}

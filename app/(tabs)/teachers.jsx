@@ -1,10 +1,13 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import { Dimensions, View } from "react-native";
 import styles from "../../assets/styles/teachers.styles";
 import TeachersListview from "../../components/TeachersListview";
+import { useAuthStore } from "../../store/authStore";
+import { ActivityIndicator } from "react-native-paper";
+import { API_URL } from "../../constants/api";
 const teacherImage = "https://api.dicebear.com/7.x/avataaars/svg?seed=loborich"
 // sample data
-const teachers = [
+const itemList = [
   {
     id: "1",
     name: "Prof. Alice Johnson",
@@ -37,9 +40,39 @@ const teachers = [
   
 
 const Teachers = () => {
+  const { token } = useAuthStore();
+  const [teachers, setTeachers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [value, setValue] = useState("contributors");
+
+
+  const fetchUsers = async () => {
+    try {
+      const res = await fetch(`${API_URL}/auth/${value}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await res.json();
+      setTeachers(data);
+    } catch (err) {
+      console.error("Error fetching users:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchUsers();
+  }, [value]);
+
+  console.log("teachers", teachers);
+
+  if (loading) return <ActivityIndicator size="large" style={{ marginTop: 50 }} />;
+
   return (
     <View style={styles.container}>
-      <TeachersListview itemList={teachers} />
+      <TeachersListview itemList={teachers} value={value} setValue={setValue}/>
     </View>
   );
 };

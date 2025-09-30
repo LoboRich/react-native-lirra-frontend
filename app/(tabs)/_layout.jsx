@@ -50,18 +50,9 @@ export default function TabLayout() {
         redirect={user?.role == 'admin'}
       />
 
-      <Tabs.Screen
-        name="dashboard"
-        options={{
-          title: "Dashbboard",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="grid-outline" size={size} color={color} />
-          ),
-        }}
-        redirect={user?.role == 'user'}
-      />
 
-      <Tabs.Screen
+
+<Tabs.Screen
         name="approved"
         options={{
           title: "For Procurement",
@@ -78,6 +69,17 @@ export default function TabLayout() {
           title: "Teachers",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="people-outline" size={size} color={color} />
+          ),
+        }}
+        redirect={user?.role == 'user'}
+      />
+
+      <Tabs.Screen
+        name="dashboard"
+        options={{
+          title: "Dashbboard",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="grid-outline" size={size} color={color} />
           ),
         }}
         redirect={user?.role == 'user'}

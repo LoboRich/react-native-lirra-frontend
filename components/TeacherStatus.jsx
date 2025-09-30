@@ -11,9 +11,7 @@ const theme = {
       onSurfaceVariant: COLORS.textDark,
     },
   };
-export default function TeacherStatusSegments() {
-    const [value, setValue] = React.useState("contributors");
-
+export default function TeacherStatusSegments({ value, setValue }) {
   return (
     <View style={{ marginHorizontal: 10, marginTop: 50 }}>
       <SegmentedButtons
