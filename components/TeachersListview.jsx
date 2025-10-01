@@ -32,10 +32,11 @@ export default function TeachersGrid({itemList, value, setValue, token}) {
       if (!res.ok) throw new Error("Failed to activate user");
   
       const data = await res.json();
-      console.log("Activated:", data);
       return data;
     } catch (err) {
       console.error(err);
+    } finally {
+      closeMenu();
     }
   };
   
@@ -56,6 +57,8 @@ export default function TeachersGrid({itemList, value, setValue, token}) {
       return data;
     } catch (err) {
       console.error(err);
+    } finally {
+      closeMenu();
     }
   };
   
