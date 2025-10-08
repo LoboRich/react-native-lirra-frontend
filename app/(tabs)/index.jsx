@@ -10,7 +10,7 @@ import {
   import { useAuthStore } from "../../store/authStore";
   
   import { Image } from "expo-image";
-  import { useEffect, useState } from "react";
+  import { useCallback, useEffect, useState } from "react";
   
   import styles from "../../assets/styles/home.styles";
   import { API_URL } from "../../constants/api";
@@ -20,6 +20,7 @@ import {
   import Loader from "../../components/Loader";
   import ListHeader from "../../components/ListHeader";
 import { Avatar } from "react-native-paper";
+import { useFocusEffect } from "expo-router";
   
   export const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
   
@@ -75,6 +76,12 @@ import { Avatar } from "react-native-paper";
     useEffect(() => {
         fetchReadingMaterials();
     }, []);
+
+    useFocusEffect(
+      useCallback(() => {
+        fetchReadingMaterials(1, true);
+      }, [])
+    );
 
     useEffect(() => {
       const delayDebounce = setTimeout(() => {

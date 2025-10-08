@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Dimensions, View } from "react-native";
 import styles from "../../assets/styles/teachers.styles";
 import TeachersListview from "../../components/TeachersListview";
 import { useAuthStore } from "../../store/authStore";
 import { ActivityIndicator } from "react-native-paper";
 import { API_URL } from "../../constants/api";
+import { useFocusEffect } from "expo-router";
 const teacherImage = "https://api.dicebear.com/7.x/avataaars/svg?seed=loborich"
 // sample data
 const itemList = [
@@ -64,12 +65,16 @@ const Teachers = () => {
     fetchUsers();
   }, [value]);
 
-  
+  useFocusEffect(
+    useCallback(() => {
+      fetchUsers();
+    }, [])
+  );
   if (loading) return <ActivityIndicator size="large" style={{ marginTop: 50 }} />;
 
   return (
     <View style={styles.container}>
-      <TeachersListview itemList={teachers} value={value} setValue={setValue} token={token}/>
+      <TeachersListview itemList={teachers} value={value} setValue={setValue} token={token} fetchUsers={fetchUsers}/>
     </View>
   );
 };

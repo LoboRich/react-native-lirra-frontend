@@ -12,7 +12,7 @@ import { API_URL } from "../constants/api";
 const screenWidth = Dimensions.get("window").width;
 const cardWidth = (screenWidth - 40) / 2; // 2 cards per row with margin
 
-export default function TeachersGrid({itemList, value, setValue, token}) {
+export default function TeachersGrid({itemList, value, setValue, token, fetchUsers}) {
   const [query, setQuery] = useState("");
   const [menuVisibleId, setMenuVisibleId] = useState(null); 
 
@@ -32,6 +32,7 @@ export default function TeachersGrid({itemList, value, setValue, token}) {
       if (!res.ok) throw new Error("Failed to activate user");
   
       const data = await res.json();
+      await fetchUsers();
       return data;
     } catch (err) {
       console.error(err);
@@ -54,6 +55,7 @@ export default function TeachersGrid({itemList, value, setValue, token}) {
   
       const data = await res.json();
       console.log("Deleted:", data);
+      await fetchUsers();
       return data;
     } catch (err) {
       console.error(err);
