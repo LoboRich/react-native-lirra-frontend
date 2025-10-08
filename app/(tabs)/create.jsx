@@ -30,67 +30,75 @@ export default function Create() {
 
   const router = useRouter();
   const { token } = useAuthStore();
-
-  console.log(token);
-
   const pickImage = async () => {
     try {
-      // request permission if needed
+      // Request permission if needed
       if (Platform.OS !== "web") {
         const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-
         if (status !== "granted") {
           Alert.alert("Permission Denied", "We need camera roll permissions to upload an image");
           return;
         }
       }
 
-      // launch image library
+      // Launch image picker
       const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: "images",
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
         aspect: [4, 3],
-        quality: 0.5, // lower quality for smaller base64
+        quality: 0.7,
         base64: true,
       });
 
       if (!result.canceled) {
-        setImage(result.assets[0].uri);
+        const asset = result.assets[0];
+        setImage(asset.uri);
 
-        // if base64 is provided, use it
-
-        if (result.assets[0].base64) {
-          setImageBase64(result.assets[0].base64);
+        // Prefer built-in base64 if provided
+        if (asset.base64) {
+          setImageBase64(asset.base64);
         } else {
-          // otherwise, convert to base64
-          const base64 = await FileSystem.readAsStringAsync(result.assets[0].uri, {
+          const base64 = await FileSystem.readAsStringAsync(asset.uri, {
             encoding: FileSystem.EncodingType.Base64,
           });
-
           setImageBase64(base64);
+        }
+
+        // Validate base64 string
+        if (!asset.base64 && !imageBase64) {
+          Alert.alert("Error", "Unable to read image file, please try again.");
         }
       }
     } catch (error) {
       console.error("Error picking image:", error);
-      Alert.alert("Error", "There was a problem selecting your image");
+      Alert.alert("Error", "There was a problem selecting your image.");
     }
   };
 
   const handleSubmit = async () => {
     if (!title || !caption || !imageBase64) {
-      Alert.alert("Error", "Please fill in all fields");
+      Alert.alert("Error", "Please fill in all fields and select a valid image.");
       return;
     }
 
     try {
       setLoading(true);
 
-      // get file extension from URI or default to jpeg
+      // Ensure the image has a valid extension
       const uriParts = image.split(".");
-      const fileType = uriParts[uriParts.length - 1];
-      const imageType = fileType ? `image/${fileType.toLowerCase()}` : "image/jpeg";
+      const fileType = uriParts[uriParts.length - 1]?.toLowerCase();
+      const validTypes = ["jpg", "jpeg", "png", "webp"];
+
+      const imageType = validTypes.includes(fileType)
+        ? `image/${fileType}`
+        : "image/jpeg";
 
       const imageDataUrl = `data:${imageType};base64,${imageBase64}`;
+
+      // Verify the base64 string looks valid
+      if (!imageDataUrl.startsWith("data:image/")) {
+        throw new Error("Invalid image format. Please try another image.");
+      }
 
       const response = await fetch(`${API_URL}/reading-materials`, {
         method: "POST",
@@ -107,7 +115,15 @@ export default function Create() {
         }),
       });
 
-      const data = await response.json();
+      const text = await response.text();
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch (err) {
+        console.error("Non-JSON response:", text);
+        throw new Error("Invalid server response. Please check your backend.");
+      }
+
       if (!response.ok) throw new Error(data.message || "Something went wrong");
 
       Alert.alert("Success", "Your material recommendation has been posted!");
@@ -118,11 +134,12 @@ export default function Create() {
       router.push("/");
     } catch (error) {
       console.error("Error creating material:", error);
-      Alert.alert("Error", error.message || "Something went wrong");
+      Alert.alert("Error", error.message || "Something went wrong while uploading.");
     } finally {
       setLoading(false);
     }
   };
+  
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
