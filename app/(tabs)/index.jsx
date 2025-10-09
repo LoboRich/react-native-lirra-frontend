@@ -6,6 +6,7 @@ import {
     RefreshControl,
     TextInput,
     TouchableOpacity,
+    Alert,
   } from "react-native";
   import { useAuthStore } from "../../store/authStore";
   
@@ -25,7 +26,7 @@ import { useFocusEffect } from "expo-router";
   export const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
   
   export default function Home() {
-    const { token } = useAuthStore();
+    const { token, user } = useAuthStore();
     const [readingMaterials, setreadingMaterials] = useState([]);
     const [loading, setLoading] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
@@ -39,7 +40,7 @@ import { useFocusEffect } from "expo-router";
         else if (pageNum === 1) setLoading(true);
     
         const response = await fetch(
-          `${API_URL}/reading-materials?page=${pageNum}&limit=5&search=${encodeURIComponent(
+          `${API_URL}/reading-materials?approved=false&page=${pageNum}&limit=5&search=${encodeURIComponent(
             searchQuery
           )}`,
           {
@@ -124,6 +125,28 @@ import { useFocusEffect } from "expo-router";
       } catch (err) {
         console.log("Vote error:", err);
       }
+    };
+
+    const handleApprove = async (materialId) => {
+      try {
+        const response = await fetch(`${API_URL}/reading-materials/${materialId}/approve`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+    
+        if (!response.ok) {
+          throw new Error("Failed to vote");
+        }
+        Alert.alert("Success", "Book approved successfully");
+        const data = await response.json();
+        await fetchReadingMaterials(1, true);
+        
+      } catch (err) {
+        console.log("Vote error:", err);
+      }
     };    
     
     const renderItem = ({ item }) => (
@@ -132,15 +155,14 @@ import { useFocusEffect } from "expo-router";
         <View style={styles.bookHeader}>
           <View style={styles.userInfo}>
             <Image source={{ uri: item.user.profileImage }} style={styles.avatar} />
-            {/* <Avatar.Image
+            <Avatar.Image
               size={36}
               source={{ uri: item.user.profileImage }}
               style={[styles.avatar, { backgroundColor: COLORS.primary }]}
-            /> */}
+            />
             <Text style={styles.username}>{item.user.username}</Text>
           </View>
         </View>
-
         {/* Book Image */}
         <View style={styles.bookImageContainer}>
           <Image source={item.image} style={styles.bookImage} contentFit="cover" />
@@ -153,19 +175,37 @@ import { useFocusEffect } from "expo-router";
           <Text style={styles.date}>Shared on {formatPublishDate(item.createdAt)}</Text>
         </View>
 
-        {/* Vote Section */}
-        <View style={styles.voteSection}>
-          <TouchableOpacity
-            style={[styles.voteButton, item.hasVoted && styles.voteButtonActive]}
-            onPress={() => handleVote(item._id)}
-          >
-            <Ionicons
-              name={item.hasVoted ? "thumbs-up" : "thumbs-up-outline"}
-              size={22}
-              color={item.hasVoted ? COLORS.primary : COLORS.textSecondary}
-            />
-            <Text style={styles.voteText}>{item.votesCount || 0}</Text>
-          </TouchableOpacity>
+        <View style={styles.voteApproveIcons}>
+          {/* Vote Section */}
+          <View style={styles.voteSection}>
+            <TouchableOpacity
+              style={[styles.voteButton, item.hasVoted && styles.voteButtonActive]}
+              onPress={() => handleVote(item._id)}
+            >
+              <Ionicons
+                name={item.hasVoted ? "thumbs-up" : "thumbs-up-outline"}
+                size={22}
+                color={item.hasVoted ? COLORS.primary : COLORS.textSecondary}
+              />
+              <Text style={styles.voteText}>{item.votesCount || 0}</Text>
+            </TouchableOpacity>
+          </View>
+        
+          {user?.role === "admin" && (
+            <View style={styles.approveSection}>
+              <TouchableOpacity
+                style={styles.approveButton}
+                onPress={() => handleApprove(item._id)}
+              >
+                <Ionicons
+                  name="checkmark-circle"
+                  size={22}
+                  color={COLORS.textSecondary}
+                />
+              </TouchableOpacity>
+            </View>
+          )}
+
         </View>
       </View>
 

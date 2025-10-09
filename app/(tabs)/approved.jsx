@@ -36,7 +36,7 @@ import {
         else if (pageNum === 1) setLoading(true);
     
         const response = await fetch(
-          `${API_URL}/reading-materials?page=${pageNum}&limit=5&search=${encodeURIComponent(
+          `${API_URL}/reading-materials?approved=true&page=${pageNum}&limit=5&search=${encodeURIComponent(
             searchQuery
           )}`,
           {

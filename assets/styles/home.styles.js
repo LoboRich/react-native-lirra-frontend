@@ -138,28 +138,36 @@ const styles = StyleSheet.create({
     color: COLORS.textPrimary,
   },
   voteSection: {
-    flexDirection: "row",
-    justifyContent: "flex-start",
-    alignItems: "center",
-    marginTop: 8,
+    flexDirection: "row", // ✅ align horizontally
+    alignItems: "center", // vertically center
   },
+  
   voteButton: {
-    flexDirection: "row",
+    flexDirection: "row", // ✅ icon + text inline
     alignItems: "center",
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 20,
-    backgroundColor: "#f5f5f5",
+    gap: 6, // optional: spacing between icon and number (React Native 0.71+)
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    borderRadius: 8,
+    backgroundColor: COLORS.lightGray,
   },
+  
   voteButtonActive: {
-    backgroundColor: "#ffe6eb",
+    backgroundColor: COLORS.primaryLight,
   },
+  
   voteText: {
-    marginLeft: 6,
+    marginLeft: 4, // if 'gap' not supported
+    color: COLORS.textSecondary,
     fontSize: 14,
     fontWeight: "500",
-    color: COLORS.textPrimary,
   },
+  voteApproveIcons: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: 8,
+  }
 });
 
 export default styles;
