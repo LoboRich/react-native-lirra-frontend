@@ -4,6 +4,7 @@ import { Card, Text } from "react-native-paper";
 import { LineChart, BarChart } from "react-native-chart-kit";
 import COLORS from "../../constants/colors";
 import styles from "../../assets/styles/dashboard.styles";
+import LogoutButton from "../../components/LogoutButton";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -107,6 +108,7 @@ export default function Dashboard() {
           />
         </Card.Content>
       </Card>
+       <LogoutButton />
     </ScrollView>
   );
 }

@@ -43,10 +43,10 @@ export default function Create() {
 
       // Launch image picker
       const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        mediaTypes: "images",
         allowsEditing: true,
         aspect: [4, 3],
-        quality: 0.7,
+        quality: 0.5,
         base64: true,
       });
 
@@ -58,8 +58,8 @@ export default function Create() {
         if (asset.base64) {
           setImageBase64(asset.base64);
         } else {
-          const base64 = await FileSystem.readAsStringAsync(asset.uri, {
-            encoding: FileSystem.EncodingType.Base64,
+          const base64 = await FileSystem.readAsStringAsync(result.assets[0].uri, {
+            encoding: "base64",
           });
           setImageBase64(base64);
         }

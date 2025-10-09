@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { act, useEffect, useState } from "react";
 import {
   View,
   Alert,
@@ -25,8 +25,8 @@ export default function Profile() {
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [deleteBookId, setDeleteBookId] = useState(null);
-
-  const { token } = useAuthStore();
+  const [activeTab, setActiveTab] = useState("recommendations");
+  const { token, user } = useAuthStore();
 
   const router = useRouter();
 
@@ -34,14 +34,15 @@ export default function Profile() {
     try {
       setIsLoading(true);
 
-      const response = await fetch(`${API_URL}/reading-materials/user`, {
+      const response = await fetch(`${API_URL}/reading-materials/user/materials?filter=${activeTab}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-
+      
       const data = await response.json();
+      console.log(data);
       if (!response.ok) throw new Error(data.message || "Failed to fetch user books");
 
-      setBooks(data);
+      setBooks(data.readingMaterials);
     } catch (error) {
       console.error("Error fetching data:", error);
       Alert.alert("Error", "Failed to load profile data. Pull down to refresh.");
@@ -52,7 +53,7 @@ export default function Profile() {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [activeTab]);
 
   const handleDeleteBook = async (bookId) => {
     try {
@@ -92,33 +93,17 @@ export default function Profile() {
         </Text>
         <Text style={styles.bookDate}>{new Date(item.createdAt).toLocaleDateString()}</Text>
       </View>
-
-      <TouchableOpacity style={styles.deleteButton} onPress={() => confirmDelete(item._id)}>
-        {deleteBookId === item._id ? (
-          <ActivityIndicator size="small" color={COLORS.primary} />
-        ) : (
-          <Ionicons name="trash-outline" size={20} color={COLORS.primary} />
-        )}
-      </TouchableOpacity>
+      { activeTab === "recommendations" && (
+        <TouchableOpacity style={styles.deleteButton} onPress={() => confirmDelete(item._id)}>
+          {deleteBookId === item._id ? (
+            <ActivityIndicator size="small" color={COLORS.primary} />
+          ) : (
+            <Ionicons name="trash-outline" size={20} color={COLORS.primary} />
+          )}
+        </TouchableOpacity>
+      )}
     </View>
   );
-
-  const renderRatingStars = (rating) => {
-    const stars = [];
-    for (let i = 1; i <= 5; i++) {
-      stars.push(
-        <Ionicons
-          key={i}
-          name={i <= rating ? "star" : "star-outline"}
-          size={14}
-          color={i <= rating ? "#f4b400" : COLORS.textSecondary}
-          style={{ marginRight: 2 }}
-        />
-      );
-    }
-    return stars;
-  };
-
   const handleRefresh = async () => {
     setRefreshing(true);
     await sleep(500);
@@ -139,30 +124,43 @@ export default function Profile() {
         <Text style={styles.booksCount}>{books.length} books</Text>
       </View>
 
-      <FlatList
-        data={books}
-        renderItem={renderBookItem}
-        keyExtractor={(item) => item._id}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.booksList}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={handleRefresh}
-            colors={[COLORS.primary]}
-            tintColor={COLORS.primary}
+      
+      <View style={{ flex: 1 }}>
+        {/* Tabs Header */}
+        <View style={{ flexDirection: "row", justifyContent: "center" }}>
+          <TouchableOpacity onPress={() => setActiveTab("recommendations")} style={{ padding: 10 }}>
+            <Text style={{ color: activeTab === "recommendations" ? "blue" : "gray" }}>Recommendations</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setActiveTab("voted")} style={{ padding: 10 }}>
+            <Text style={{ color: activeTab === "voted" ? "blue" : "gray" }}>Voted</Text>
+          </TouchableOpacity>
+        </View>
+
+        <FlatList
+            data={books}
+            renderItem={renderBookItem}
+            keyExtractor={(item) => item._id}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={styles.booksList}
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={handleRefresh}
+                colors={[COLORS.primary]}
+                tintColor={COLORS.primary}
+              />
+            }
+            ListEmptyComponent={
+              <View style={styles.emptyContainer}>
+                <Ionicons name="book-outline" size={50} color={COLORS.textSecondary} />
+                <Text style={styles.emptyText}>No recommendations yet</Text>
+                <TouchableOpacity style={styles.addButton} onPress={() => router.push("/create")}>
+                  <Text style={styles.addButtonText}>Add Your First Recommendation</Text>
+                </TouchableOpacity>
+              </View>
+            }
           />
-        }
-        ListEmptyComponent={
-          <View style={styles.emptyContainer}>
-            <Ionicons name="book-outline" size={50} color={COLORS.textSecondary} />
-            <Text style={styles.emptyText}>No recommendations yet</Text>
-            <TouchableOpacity style={styles.addButton} onPress={() => router.push("/create")}>
-              <Text style={styles.addButtonText}>Add Your First Recommendation</Text>
-            </TouchableOpacity>
-          </View>
-        }
-      />
+      </View>
     </View>
   );
 }
