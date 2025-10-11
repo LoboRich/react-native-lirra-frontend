@@ -186,7 +186,8 @@ import { formatPublishDate } from "../../lib/utils";
                 size={22}
                 color={item.hasVoted ? COLORS.primary : COLORS.textSecondary}
               />
-              <Text style={styles.voteText}>{item.votesCount || 0}</Text>
+              <Text style={styles.voteText}>{item.votesCount || 0}</Text> 
+              <Text style={{color:COLORS.primary}} >Recommend</Text>
             </TouchableOpacity>
           </View>
         
