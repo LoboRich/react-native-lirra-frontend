@@ -1,27 +1,26 @@
 import {
-    View,
-    Text,
-    FlatList,
-    ActivityIndicator,
-    RefreshControl,
-    TextInput,
-    TouchableOpacity,
-    Alert,
-  } from "react-native";
-  import { useAuthStore } from "../../store/authStore";
+  ActivityIndicator,
+  Alert,
+  FlatList,
+  RefreshControl,
+  Text,
+  TouchableOpacity,
+  View
+} from "react-native";
+import { useAuthStore } from "../../store/authStore";
   
   import { Image } from "expo-image";
-  import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
   
-  import styles from "../../assets/styles/home.styles";
-  import { API_URL } from "../../constants/api";
   import { Ionicons } from "@expo/vector-icons";
-  import { formatPublishDate } from "../../lib/utils";
-  import COLORS from "../../constants/colors";
-  import Loader from "../../components/Loader";
-  import ListHeader from "../../components/ListHeader";
-import { Avatar } from "react-native-paper";
 import { useFocusEffect } from "expo-router";
+import { Avatar } from "react-native-paper";
+import styles from "../../assets/styles/home.styles";
+import ListHeader from "../../components/ListHeader";
+import Loader from "../../components/Loader";
+import { API_URL } from "../../constants/api";
+import COLORS from "../../constants/colors";
+import { formatPublishDate } from "../../lib/utils";
   
   export const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
   
@@ -232,7 +231,7 @@ import { useFocusEffect } from "expo-router";
           onEndReached={handleLoadMore}
           onEndReachedThreshold={0.1}
           ListHeaderComponent={
-            <ListHeader searchQuery={searchQuery} setSearchQuery={setSearchQuery} title={"LIRRA"} description={"Share your favorite materials with the community!"}/>
+            <ListHeader searchQuery={searchQuery} setSearchQuery={setSearchQuery} title={"LIRRA"} description={"Library Resources Recommender Application "}/>
           }
           ListFooterComponent={
             hasMore && readingMaterials.length > 0 ? (
