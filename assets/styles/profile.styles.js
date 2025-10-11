@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   booksTitle: {
-    fontSize: 18,
+    fontSize: 15,
     fontWeight: "700",
     color: COLORS.textPrimary,
   },

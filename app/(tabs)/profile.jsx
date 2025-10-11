@@ -1,24 +1,24 @@
-import { act, useEffect, useState } from "react";
-import {
-  View,
-  Alert,
-  Text,
-  FlatList,
-  TouchableOpacity,
-  ActivityIndicator,
-  RefreshControl,
-} from "react-native";
-import { useRouter } from "expo-router";
-import { API_URL } from "../../constants/api";
-import { useAuthStore } from "../../store/authStore";
-import styles from "../../assets/styles/profile.styles";
-import ProfileHeader from "../../components/ProfileHeader";
-import LogoutButton from "../../components/LogoutButton";
 import { Ionicons } from "@expo/vector-icons";
-import COLORS from "../../constants/colors";
 import { Image } from "expo-image";
+import { useRouter } from "expo-router";
+import { useEffect, useState } from "react";
+import {
+  ActivityIndicator,
+  Alert,
+  FlatList,
+  RefreshControl,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { sleep } from ".";
+import styles from "../../assets/styles/profile.styles";
 import Loader from "../../components/Loader";
+import LogoutButton from "../../components/LogoutButton";
+import ProfileHeader from "../../components/ProfileHeader";
+import { API_URL } from "../../constants/api";
+import COLORS from "../../constants/colors";
+import { useAuthStore } from "../../store/authStore";
 
 export default function Profile() {
   const [books, setBooks] = useState([]);
@@ -120,18 +120,20 @@ export default function Profile() {
 
       {/* YOUR RECOMMENDATIONS */}
       <View style={styles.booksHeader}>
-        <Text style={styles.booksTitle}>Your Recommendations 📚</Text>
-        <Text style={styles.booksCount}>{books.length} books</Text>
+        <Text style={styles.booksTitle}>Your Library Resource Recommendations 📚</Text>
+        {/* <Text style={styles.booksCount}>{books.length} </Text> */}
       </View>
 
       
       <View style={{ flex: 1 }}>
         {/* Tabs Header */}
         <View style={{ flexDirection: "row", justifyContent: "center" }}>
-          <TouchableOpacity onPress={() => setActiveTab("recommendations")} style={{ padding: 10 }}>
-            <Text style={{ color: activeTab === "recommendations" ? "blue" : "gray" }}>Recommendations</Text>
+          <TouchableOpacity onPress={() => setActiveTab("recommendations")} style={{ padding: 10, flexDirection: "row"}}>
+            <Text style={styles.booksCount}>{activeTab === "recommendations" ? books.length : null} </Text>
+            <Text style={{ color: activeTab === "recommendations" ? "blue" : "gray" }}>Recommendation </Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => setActiveTab("voted")} style={{ padding: 10 }}>
+          <TouchableOpacity onPress={() => setActiveTab("voted")} style={{ padding: 10, flexDirection: "row"}}>
+            <Text style={styles.booksCount}>{activeTab === "voted" ? books.length : null} </Text>
             <Text style={{ color: activeTab === "voted" ? "blue" : "gray" }}>Voted</Text>
           </TouchableOpacity>
         </View>
