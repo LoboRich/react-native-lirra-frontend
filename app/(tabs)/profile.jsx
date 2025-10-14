@@ -128,13 +128,13 @@ export default function Profile() {
       <View style={{ flex: 1 }}>
         {/* Tabs Header */}
         <View style={{ flexDirection: "row", justifyContent: "center" }}>
-          <TouchableOpacity onPress={() => setActiveTab("recommendations")} style={{ padding: 10, flexDirection: "row"}}>
-            <Text style={styles.booksCount}>{activeTab === "recommendations" ? books.length : null} </Text>
-            <Text style={{ color: activeTab === "recommendations" ? "blue" : "gray" }}>Recommendation </Text>
+          <TouchableOpacity onPress={() => setActiveTab("Suggested")} style={{ padding: 10, flexDirection: "row"}}>
+            <Text style={styles.booksCount}>{activeTab === "Suggested" ? books.length : null} </Text>
+            <Text style={{ color: activeTab === "Suggested" ? "blue" : "gray" }}>Suggested </Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => setActiveTab("voted")} style={{ padding: 10, flexDirection: "row"}}>
-            <Text style={styles.booksCount}>{activeTab === "voted" ? books.length : null} </Text>
-            <Text style={{ color: activeTab === "voted" ? "blue" : "gray" }}>Voted</Text>
+          <TouchableOpacity onPress={() => setActiveTab("Recommended")} style={{ padding: 10, flexDirection: "row"}}>
+            <Text style={styles.booksCount}>{activeTab === "Recommended" ? books.length : null} </Text>
+            <Text style={{ color: activeTab === "Recommended" ? "blue" : "gray" }}>Recommended</Text>
           </TouchableOpacity>
         </View>
 
