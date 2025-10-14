@@ -1,24 +1,24 @@
+import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import { useState } from "react";
 import {
-  View,
-  Text,
-  Platform,
-  KeyboardAvoidingView,
-  ScrollView,
-  TextInput,
-  TouchableOpacity,
+  ActivityIndicator,
   Alert,
   Image,
-  ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
-import { useRouter } from "expo-router";
 import styles from "../../assets/styles/create.styles";
-import { Ionicons } from "@expo/vector-icons";
 import COLORS from "../../constants/colors";
 import { useAuthStore } from "../../store/authStore";
 
-import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
+import * as ImagePicker from "expo-image-picker";
 import { API_URL } from "../../constants/api";
 
 export default function Create() {
@@ -190,7 +190,7 @@ export default function Create() {
 
             {/* CAPTION */}
             <View style={styles.formGroup}>
-              <Text style={styles.label}>Remarks</Text>
+              <Text style={styles.label}>Description</Text>
               <TextInput
                 style={styles.textArea}
                 placeholder="Write your review or thoughts about this material..."
@@ -212,7 +212,7 @@ export default function Create() {
                     color={COLORS.white}
                     style={styles.buttonIcon}
                   />
-                  <Text style={styles.buttonText}>Share</Text>
+                  <Text style={styles.buttonText}>Suggested</Text>
                 </>
               )}
             </TouchableOpacity>
