@@ -1,26 +1,27 @@
 import {
-  ActivityIndicator,
-  Alert,
-  FlatList,
-  RefreshControl,
-  Text,
-  TouchableOpacity,
-  View
-} from "react-native";
-import { useAuthStore } from "../../store/authStore";
+    View,
+    Text,
+    FlatList,
+    ActivityIndicator,
+    RefreshControl,
+    TextInput,
+    TouchableOpacity,
+    Alert,
+  } from "react-native";
+  import { useAuthStore } from "../../store/authStore";
   
   import { Image } from "expo-image";
-import { useCallback, useEffect, useState } from "react";
+  import { useCallback, useEffect, useState } from "react";
   
+  import styles from "../../assets/styles/home.styles";
+  import { API_URL } from "../../constants/api";
   import { Ionicons } from "@expo/vector-icons";
-import { useFocusEffect } from "expo-router";
+  import { formatPublishDate } from "../../lib/utils";
+  import COLORS from "../../constants/colors";
+  import Loader from "../../components/Loader";
+  import ListHeader from "../../components/ListHeader";
 import { Avatar } from "react-native-paper";
-import styles from "../../assets/styles/home.styles";
-import ListHeader from "../../components/ListHeader";
-import Loader from "../../components/Loader";
-import { API_URL } from "../../constants/api";
-import COLORS from "../../constants/colors";
-import { formatPublishDate } from "../../lib/utils";
+import { useFocusEffect } from "expo-router";
   
   export const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
   
@@ -152,20 +153,21 @@ import { formatPublishDate } from "../../lib/utils";
       <View style={styles.bookCard} key={item._id}>
         {/* Header: User info */}
         <View style={styles.bookHeader}>
-          <View style={styles.userInfo}>
-            <Image source={{ uri: item.user.profileImage }} style={styles.avatar} />
-            <Avatar.Image
-              size={36}
-              source={{ uri: item.user.profileImage }}
-              style={[styles.avatar, { backgroundColor: COLORS.primary }]}
-            />
-            <Text style={styles.username}>{item.user.username}</Text>
-          </View>
+          {user?.role === "admin" && (
+              <View style={styles.approveSection}>
+                <TouchableOpacity
+                  style={styles.approveButton}
+                  onPress={() => handleApprove(item._id)}
+                >
+                  <Text style={styles.approveButtonText}>Approve</Text>
+                </TouchableOpacity>
+              </View>
+            )}
         </View>
         {/* Book Image */}
-        <View style={styles.bookImageContainer}>
+        {/* <View style={styles.bookImageContainer}>
           <Image source={item.image} style={styles.bookImage} contentFit="cover" />
-        </View>
+        </View> */}
 
         {/* Book Details */}
         <View style={styles.bookDetails}>
@@ -175,8 +177,12 @@ import { formatPublishDate } from "../../lib/utils";
         </View>
 
         <View style={styles.voteApproveIcons}>
-          {/* Vote Section */}
-          <View style={styles.voteSection}>
+          <View style={styles.userInfo}>
+            <Text style={styles.username}>{item.user.username}</Text>
+          </View>
+
+           {/* Vote Section */}
+           <View style={styles.voteSection}>
             <TouchableOpacity
               style={[styles.voteButton, item.hasVoted && styles.voteButtonActive]}
               onPress={() => handleVote(item._id)}
@@ -186,25 +192,10 @@ import { formatPublishDate } from "../../lib/utils";
                 size={22}
                 color={item.hasVoted ? COLORS.primary : COLORS.textSecondary}
               />
-              <Text style={styles.voteText}>{item.votesCount || 0}</Text> 
+              <Text style={styles.voteText}>{item.votesCount || 0}</Text>
               <Text style={{color:COLORS.primary}} >Recommend</Text>
             </TouchableOpacity>
           </View>
-        
-          {user?.role === "admin" && (
-            <View style={styles.approveSection}>
-              <TouchableOpacity
-                style={styles.approveButton}
-                onPress={() => handleApprove(item._id)}
-              >
-                <Ionicons
-                  name="checkmark-circle"
-                  size={22}
-                  color={COLORS.textSecondary}
-                />
-              </TouchableOpacity>
-            </View>
-          )}
 
         </View>
       </View>
@@ -232,7 +223,7 @@ import { formatPublishDate } from "../../lib/utils";
           onEndReached={handleLoadMore}
           onEndReachedThreshold={0.1}
           ListHeaderComponent={
-            <ListHeader searchQuery={searchQuery} setSearchQuery={setSearchQuery} title={"LIRRA"} description={"Library Resources Recommender Application "}/>
+            <ListHeader searchQuery={searchQuery} setSearchQuery={setSearchQuery} title={"LIRRA"} description={"Library Resources Recommender Application"}/>
           }
           ListFooterComponent={
             hasMore && readingMaterials.length > 0 ? (

@@ -47,9 +47,9 @@ const styles = StyleSheet.create({
     borderColor: COLORS.border,
   },
   bookHeader: {
-    flexDirection: "row",
+    flexDirection: "column",
     justifyContent: "space-between",
-    alignItems: "center",
+    alignItems: "flex-end",
     marginBottom: 12,
   },
   userInfo: {
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
   username: {
     fontSize: 15,
     fontWeight: "600",
-    color: COLORS.textPrimary,
+    color: COLORS.placeholderText,
   },
   bookImageContainer: {
     width: "100%",
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     padding: 4,
   },
   bookTitle: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: "700",
     color: COLORS.textPrimary,
     marginBottom: 6,
@@ -167,7 +167,22 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     marginTop: 8,
-  }
+  },
+  approveButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: COLORS.primary,
+    borderRadius: 12,
+    padding: 8,
+    position: "absolute",
+    top: -25,
+    right: 8,
+  },
+  approveButtonText: {
+    color: COLORS.white,
+    fontSize: 14,
+    fontWeight: "600",
+  },
 });
 
 export default styles;
