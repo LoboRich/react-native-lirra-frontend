@@ -152,7 +152,7 @@ import { useFocusEffect } from "expo-router";
     const renderItem = ({ item }) => (
       <View style={styles.bookCard} key={item._id}>
         {/* Header: User info */}
-        <View style={styles.bookHeader}>
+        {/* <View style={styles.bookHeader}>
           {user?.role === "admin" && (
               <View style={styles.approveSection}>
                 <TouchableOpacity
@@ -163,7 +163,7 @@ import { useFocusEffect } from "expo-router";
                 </TouchableOpacity>
               </View>
             )}
-        </View>
+        </View> */}
         {/* Book Image */}
         {/* <View style={styles.bookImageContainer}>
           <Image source={item.image} style={styles.bookImage} contentFit="cover" />
@@ -178,7 +178,7 @@ import { useFocusEffect } from "expo-router";
 
         <View style={styles.voteApproveIcons}>
           <View style={styles.userInfo}>
-            <Text style={styles.username}>{item.user.username}</Text>
+            <Text style={styles.username}>Suggested by: {item.user.username}</Text>
           </View>
 
            {/* Vote Section */}

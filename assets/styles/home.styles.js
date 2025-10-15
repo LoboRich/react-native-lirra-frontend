@@ -61,8 +61,8 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   username: {
-    fontSize: 15,
-    fontWeight: "600",
+    fontSize: 10,
+    fontWeight: "400",
     color: COLORS.placeholderText,
   },
   bookImageContainer: {
