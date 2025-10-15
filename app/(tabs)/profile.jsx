@@ -39,7 +39,6 @@ export default function Profile() {
       });
       
       const data = await response.json();
-      console.log(data);
       if (!response.ok) throw new Error(data.message || "Failed to fetch user books");
 
       setBooks(data.readingMaterials);

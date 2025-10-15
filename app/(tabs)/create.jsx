@@ -20,11 +20,15 @@ import { useAuthStore } from "../../store/authStore";
 import * as FileSystem from "expo-file-system";
 import * as ImagePicker from "expo-image-picker";
 import { API_URL } from "../../constants/api";
+import KeywordInputWithSuggestions from "../../components/KeywordInput";
 
 export default function Create() {
   const [title, setTitle] = useState("");
   const [caption, setCaption] = useState("");
   const [image, setImage] = useState(null); // to display the selected image
+  const [keyword, setKeyword] = useState("");
+  const [keywords, setKeywords] = useState([]);
+  const [author, setAuthor] = useState("");
   const [imageBase64, setImageBase64] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -75,8 +79,20 @@ export default function Create() {
     }
   };
 
+  const addKeyword = () => {
+    const trimmed = keyword.trim();
+    if (trimmed && !keywords.includes(trimmed)) {
+      setKeywords([...keywords, trimmed]);
+      setKeyword("");
+    }
+  };
+
+  const removeKeyword = (index) => {
+    setKeywords(keywords.filter((_, i) => i !== index));
+  };
+
   const handleSubmit = async () => {
-    if (!title || !caption || !imageBase64) {
+    if (!title || !caption || !author){
       Alert.alert("Error", "Please fill in all fields and select a valid image.");
       return;
     }
@@ -85,20 +101,19 @@ export default function Create() {
       setLoading(true);
 
       // Ensure the image has a valid extension
-      const uriParts = image.split(".");
-      const fileType = uriParts[uriParts.length - 1]?.toLowerCase();
-      const validTypes = ["jpg", "jpeg", "png", "webp"];
+      // const uriParts = image.split(".");
+      // const fileType = uriParts[uriParts.length - 1]?.toLowerCase();
+      // const validTypes = ["jpg", "jpeg", "png", "webp"];
 
-      const imageType = validTypes.includes(fileType)
-        ? `image/${fileType}`
-        : "image/jpeg";
+      // const imageType = validTypes.includes(fileType)
+      //   ? `image/${fileType}`
+      //   : "image/jpeg";
 
-      const imageDataUrl = `data:${imageType};base64,${imageBase64}`;
+      // const imageDataUrl = `data:${imageType};base64,${imageBase64}`;
 
-      // Verify the base64 string looks valid
-      if (!imageDataUrl.startsWith("data:image/")) {
-        throw new Error("Invalid image format. Please try another image.");
-      }
+      // if (!imageDataUrl.startsWith("data:image/")) {
+      //   throw new Error("Invalid image format. Please try another image.");
+      // }
 
       const response = await fetch(`${API_URL}/reading-materials`, {
         method: "POST",
@@ -109,9 +124,8 @@ export default function Create() {
         body: JSON.stringify({
           title,
           caption,
-          image: imageDataUrl,
+          author,
           type: "book",
-          author: "Unknown",
         }),
       });
 
@@ -173,8 +187,28 @@ export default function Create() {
               </View>
             </View>
 
-            {/* IMAGE */}
+            {/* AUTHOR */}
             <View style={styles.formGroup}>
+              <Text style={styles.label}>Author</Text>
+              <View style={styles.inputContainer}>
+                <Ionicons
+                  name="person-outline"
+                  size={20}
+                  color={COLORS.textSecondary}
+                  style={styles.inputIcon}
+                />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Enter author"
+                  placeholderTextColor={COLORS.placeholderText}
+                  value={author}
+                  onChangeText={setAuthor}
+                />
+              </View>
+            </View>
+
+            {/* IMAGE */}
+            {/* <View style={styles.formGroup}>
               <Text style={styles.label}>Image</Text>
               <TouchableOpacity style={styles.imagePicker} onPress={pickImage}>
                 {image ? (
@@ -186,7 +220,7 @@ export default function Create() {
                   </View>
                 )}
               </TouchableOpacity>
-            </View>
+            </View> */}
 
             {/* CAPTION */}
             <View style={styles.formGroup}>
@@ -199,6 +233,12 @@ export default function Create() {
                 onChangeText={setCaption}
                 multiline
               />
+            </View>
+                    
+            {/* KEYWORDS */}
+            <View style={styles.formGroup}>
+              <Text style={styles.label}>Keywords</Text>
+              <KeywordInputWithSuggestions existingKeywords={["Math", "Science", "Reading", "Fiction", "Art"]} />
             </View>
 
             <TouchableOpacity style={styles.button} onPress={handleSubmit} disabled={loading}>
