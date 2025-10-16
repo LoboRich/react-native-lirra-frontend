@@ -31,7 +31,7 @@ const ListHeader = ({ searchQuery, setSearchQuery, title, description }) => {
       </Text>
 
       {/* Search bar */}
-      <Searchbar
+      {/* <Searchbar
         placeholder="Search..."
         value={searchQuery}
         onChangeText={setSearchQuery}
@@ -48,7 +48,7 @@ const ListHeader = ({ searchQuery, setSearchQuery, title, description }) => {
         }}
         iconColor={COLORS.textSecondary}
         placeholderTextColor={COLORS.textSecondary}
-      />
+      /> */}
     </View>
   );
 };
