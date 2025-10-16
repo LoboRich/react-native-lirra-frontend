@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   headerTitle: {
-    fontSize: 24,
+    fontSize: 20,
     fontFamily: "JetBrainsMono-Medium",
     letterSpacing: 0.5,
     color: COLORS.primary,
@@ -183,6 +183,73 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "600",
   },
+  keywordsContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    flexWrap: "wrap", // allows pills to wrap
+    marginTop: 6,
+  },
+  
+  keywordsPills: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    marginLeft: 6, // small spacing from "Keywords:"
+    flexShrink: 1, // prevents overflow
+  },
+  
+  keywordPill: {
+    backgroundColor: COLORS.textSecondary,
+    borderRadius: 12,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    marginRight: 6,
+    marginBottom: 6,
+  },
+  
+  keywordText: {
+    fontSize: 13,
+    color: COLORS.white,
+    fontWeight: "500",
+  },
+  
+  noKeywords: {
+    fontSize: 13,
+    color: "#888",
+  },
+  
+  group: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 6,
+    gap: 4,
+    marginTop: 10
+  },
+  
+  groupLabel: {
+    fontSize: 14,
+    color: COLORS.textDark,
+    fontWeight: "00",
+  },
+  
+  groupValue: {
+    fontSize: 14,
+    color: COLORS.textPrimary,
+    fontWeight: "700",
+  },
+  subjectPill: {
+    backgroundColor: COLORS.background,
+    borderRadius: 12,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    marginRight: 6,
+    marginBottom: 6,
+  },
+  subjectPillText: {
+    fontSize: 13,
+    color: COLORS.textPrimary,
+    fontWeight: "500",
+  }
+  
 });
 
 export default styles;

@@ -25,15 +25,16 @@ import KeywordInputWithSuggestions from "../../components/KeywordInput";
 export default function Create() {
   const [title, setTitle] = useState("");
   const [caption, setCaption] = useState("");
-  const [image, setImage] = useState(null); // to display the selected image
-  const [keyword, setKeyword] = useState("");
+  // const [image, setImage] = useState(null);
   const [keywords, setKeywords] = useState([]);
   const [author, setAuthor] = useState("");
-  const [imageBase64, setImageBase64] = useState(null);
+  const [version, setVersion] = useState(null);
+  const [edition, setEdition] = useState(null);
+  // const [imageBase64, setImageBase64] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
-  const { token } = useAuthStore();
+  const { token, user } = useAuthStore();
   const pickImage = async () => {
     try {
       // Request permission if needed
@@ -79,18 +80,6 @@ export default function Create() {
     }
   };
 
-  const addKeyword = () => {
-    const trimmed = keyword.trim();
-    if (trimmed && !keywords.includes(trimmed)) {
-      setKeywords([...keywords, trimmed]);
-      setKeyword("");
-    }
-  };
-
-  const removeKeyword = (index) => {
-    setKeywords(keywords.filter((_, i) => i !== index));
-  };
-
   const handleSubmit = async () => {
     if (!title || !caption || !author){
       Alert.alert("Error", "Please fill in all fields and select a valid image.");
@@ -125,6 +114,10 @@ export default function Create() {
           title,
           caption,
           author,
+          keywords,
+          version,
+          edition,
+          college: user?.college,
           type: "book",
         }),
       });
@@ -143,8 +136,10 @@ export default function Create() {
       Alert.alert("Success", "Your material recommendation has been posted!");
       setTitle("");
       setCaption("");
-      setImage(null);
-      setImageBase64(null);
+      setKeywords([]);
+      setAuthor("");
+      setVersion(null);
+      setEdition(null);
       router.push("/");
     } catch (error) {
       console.error("Error creating material:", error);
@@ -183,6 +178,28 @@ export default function Create() {
                   placeholderTextColor={COLORS.placeholderText}
                   value={title}
                   onChangeText={setTitle}
+                />
+              </View>
+            </View>
+
+            <View style={{flexDirection: "row", flex: 1, gap: 50}}>
+              <View style={styles.formGroup}>
+                <Text style={styles.label}>Version</Text>
+                <TextInput
+                  keyboardType="numeric"
+                  value={version}
+                  style={styles.input}
+                  onChangeText={setVersion}
+                />
+              </View>
+
+              <View style={styles.formGroup}>
+                <Text style={styles.label}>Edition</Text>
+                <TextInput
+                  keyboardType="numeric"
+                  value={edition}
+                  style={styles.input}
+                  onChangeText={setEdition}
                 />
               </View>
             </View>
@@ -238,7 +255,7 @@ export default function Create() {
             {/* KEYWORDS */}
             <View style={styles.formGroup}>
               <Text style={styles.label}>Keywords</Text>
-              <KeywordInputWithSuggestions existingKeywords={["Math", "Science", "Reading", "Fiction", "Art"]} />
+              <KeywordInputWithSuggestions keywords={keywords} setKeywords={setKeywords}/>
             </View>
 
             <TouchableOpacity style={styles.button} onPress={handleSubmit} disabled={loading}>

@@ -9,17 +9,15 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import COLORS from "../constants/colors";
 
-export default function KeywordInputWithSuggestions({ existingKeywords = [] }) {
+export default function KeywordInputWithSuggestions({keywords, setKeywords}) {
   const [keyword, setKeyword] = useState("");
-  const [keywords, setKeywords] = useState([]);
-  const [suggestions, setSuggestions] = useState([]);
 
   const addKeyword = (word = keyword) => {
     const trimmed = word.trim();
+    console.log(keywords);
     if (trimmed && !keywords.includes(trimmed)) {
       setKeywords((prev) => [...prev, trimmed]);
       setKeyword("");
-      setSuggestions([]);
     }
   };
 
@@ -29,17 +27,6 @@ export default function KeywordInputWithSuggestions({ existingKeywords = [] }) {
 
   const handleInputChange = (text) => {
     setKeyword(text);
-
-    if (text.length > 0) {
-      const filtered = existingKeywords.filter(
-        (k) =>
-          k.toLowerCase().includes(text.toLowerCase()) &&
-          !keywords.includes(k)
-      );
-      setSuggestions(filtered.slice(0, 5)); // limit to 5 suggestions
-    } else {
-      setSuggestions([]);
-    }
   };
 
   return (
@@ -59,33 +46,19 @@ export default function KeywordInputWithSuggestions({ existingKeywords = [] }) {
           <Ionicons name="add-circle" size={24} color="#007AFF" />
         </TouchableOpacity>
       </View>
-
-      {/* Suggestions dropdown (no FlatList) */}
-      {suggestions.length > 0 && (
-        <View style={styles.suggestionsBox}>
-          {suggestions.map((item) => (
-            <TouchableOpacity
-              key={item}
-              style={styles.suggestionItem}
-              onPress={() => addKeyword(item)}
-            >
-              <Text style={styles.suggestionText}>{item}</Text>
-            </TouchableOpacity>
+      {/* Chips */}
+      { keywords.length > 0 && (
+        <View style={styles.chipsContainer}>
+          {keywords.map((word, index) => (
+            <View key={index} style={styles.chip}>
+              <Text style={styles.chipText}>{word}</Text>
+              <TouchableOpacity onPress={() => removeKeyword(index)}>
+                <Ionicons name="close-circle" size={20} color={COLORS.primary} />
+              </TouchableOpacity>
+            </View>
           ))}
         </View>
       )}
-
-      {/* Chips */}
-      <View style={styles.chipsContainer}>
-        {keywords.map((k, i) => (
-          <View key={i} style={styles.chip}>
-            <Text style={styles.chipText}>{k}</Text>
-            <TouchableOpacity onPress={() => removeKeyword(i)}>
-              <Ionicons name="close-circle" size={16} color="#666" />
-            </TouchableOpacity>
-          </View>
-        ))}
-      </View>
     </View>
   );
 }

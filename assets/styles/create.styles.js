@@ -136,6 +136,7 @@ const styles = StyleSheet.create({
   buttonIcon: {
     marginRight: 8,
   },
+  
 });
 
 export default styles;

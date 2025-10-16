@@ -33,7 +33,7 @@ import { useFocusEffect } from "expo-router";
     const [page, setPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
     const [searchQuery, setSearchQuery] = useState("");
-
+    const [selectedCollege, setSelectedCollege] = useState("");
     const fetchReadingMaterials = async (pageNum = 1, refresh = false) => {
       try {
         if (refresh) setRefreshing(true);
@@ -151,36 +151,56 @@ import { useFocusEffect } from "expo-router";
     
     const renderItem = ({ item }) => (
       <View style={styles.bookCard} key={item._id}>
-        {/* Header: User info */}
-        {/* <View style={styles.bookHeader}>
-          {user?.role === "admin" && (
-              <View style={styles.approveSection}>
-                <TouchableOpacity
-                  style={styles.approveButton}
-                  onPress={() => handleApprove(item._id)}
-                >
-                  <Text style={styles.approveButtonText}>Approve</Text>
-                </TouchableOpacity>
-              </View>
-            )}
-        </View> */}
-        {/* Book Image */}
-        {/* <View style={styles.bookImageContainer}>
-          <Image source={item.image} style={styles.bookImage} contentFit="cover" />
-        </View> */}
-
         {/* Book Details */}
         <View style={styles.bookDetails}>
-          <Text style={styles.bookTitle}>{item.title}</Text>
-          <Text style={styles.caption}>{item.caption}</Text>
-          <Text style={styles.date}>Shared on {formatPublishDate(item.createdAt)}</Text>
+          <View styele={{flexDirection:"column", flex:1, justifyContent:"space-between", marginBottom:10}}>
+            <Text style={styles.bookTitle}>{item.title}</Text>
+            <View style={{flexDirection:"row", justifyContent:"space-between"}}>
+              { item.version && <Text style={styles.headerSubtitle}>Version: {item.version}</Text>}
+              { item.edition && <Text style={styles.headerSubtitle}>Edition: {item.edition}</Text>}
+            </View>
+          </View>
+
+          <View style={styles.group}>
+            <Text style={styles.groupLabel}>Publisher Name:</Text>
+            <Text style={styles.groupValue}>{item.author }</Text>
+          </View>
+          
+          
+          <View style={styles.keywordsContainer}>
+            <Text style={styles.groupLabel}>Keywords:</Text>
+            <View style={styles.keywordsPills}>
+              {item.keywords && item.keywords.length > 0 ? (
+                item.keywords.map((keyword, index) => (
+                  <View key={index} style={styles.keywordPill}>
+                    <Text style={styles.keywordText}>{keyword}</Text>
+                  </View>
+                ))
+              ) : (
+                <Text style={styles.noKeywords}>None</Text>
+              )}
+            </View>
+          </View>
+
+          <View style={styles.keywordsContainer}>
+            <Text style={styles.groupLabel}>Subject titles: </Text>
+            <View style={styles.keywordsPills}>
+              {item.keywords && item.keywords.length > 0 ? (
+                item.keywords.map((keyword, index) => (
+                  <View key={index} style={styles.subjectPill}>
+                    <Text style={styles.subjectPillText}>{keyword}</Text>
+                  </View>
+                ))
+              ) : (
+                <Text style={styles.noKeywords}>None</Text>
+              )}
+            </View>
+          </View>
+
+          {/* <Text style={styles.caption}>{item.caption}</Text> */}
         </View>
 
         <View style={styles.voteApproveIcons}>
-          <View style={styles.userInfo}>
-            <Text style={styles.username}>Suggested by: {item.user.username}</Text>
-          </View>
-
            {/* Vote Section */}
            <View style={styles.voteSection}>
             <TouchableOpacity
@@ -203,7 +223,7 @@ import { useFocusEffect } from "expo-router";
     );
   
     if (loading) return <Loader />;
-  
+
     return (
       <View style={styles.container}>
         <FlatList
