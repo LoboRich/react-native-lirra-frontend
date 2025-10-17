@@ -4,7 +4,6 @@ import { useState } from "react";
 import {
   ActivityIndicator,
   Alert,
-  Image,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -24,71 +23,67 @@ import KeywordInputWithSuggestions from "../../components/KeywordInput";
 
 export default function Create() {
   const [title, setTitle] = useState("");
-  // const [image, setImage] = useState(null);
   const [keywords, setKeywords] = useState([]);
   const [subjectTitles, setSubjectTitles] = useState([]);
   const [author, setAuthor] = useState("");
   const [version, setVersion] = useState(null);
   const [edition, setEdition] = useState(null);
-  // const [imageBase64, setImageBase64] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
   const { token, user } = useAuthStore();
-  const pickImage = async () => {
-    try {
-      // Request permission if needed
-      if (Platform.OS !== "web") {
-        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-        if (status !== "granted") {
-          Alert.alert("Permission Denied", "We need camera roll permissions to upload an image");
-          return;
-        }
-      }
+  // const pickImage = async () => {
+  //   try {
+  //     // Request permission if needed
+  //     if (Platform.OS !== "web") {
+  //       const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+  //       if (status !== "granted") {
+  //         Alert.alert("Permission Denied", "We need camera roll permissions to upload an image");
+  //         return;
+  //       }
+  //     }
 
-      // Launch image picker
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: "images",
-        allowsEditing: true,
-        aspect: [4, 3],
-        quality: 0.5,
-        base64: true,
-      });
+  //     // Launch image picker
+  //     const result = await ImagePicker.launchImageLibraryAsync({
+  //       mediaTypes: "images",
+  //       allowsEditing: true,
+  //       aspect: [4, 3],
+  //       quality: 0.5,
+  //       base64: true,
+  //     });
 
-      if (!result.canceled) {
-        const asset = result.assets[0];
-        setImage(asset.uri);
+  //     if (!result.canceled) {
+  //       const asset = result.assets[0];
+  //       setImage(asset.uri);
 
-        // Prefer built-in base64 if provided
-        if (asset.base64) {
-          setImageBase64(asset.base64);
-        } else {
-          const base64 = await FileSystem.readAsStringAsync(result.assets[0].uri, {
-            encoding: "base64",
-          });
-          setImageBase64(base64);
-        }
+  //       // Prefer built-in base64 if provided
+  //       if (asset.base64) {
+  //         setImageBase64(asset.base64);
+  //       } else {
+  //         const base64 = await FileSystem.readAsStringAsync(result.assets[0].uri, {
+  //           encoding: "base64",
+  //         });
+  //         setImageBase64(base64);
+  //       }
 
-        // Validate base64 string
-        if (!asset.base64 && !imageBase64) {
-          Alert.alert("Error", "Unable to read image file, please try again.");
-        }
-      }
-    } catch (error) {
-      console.error("Error picking image:", error);
-      Alert.alert("Error", "There was a problem selecting your image.");
-    }
-  };
+  //       // Validate base64 string
+  //       if (!asset.base64 && !imageBase64) {
+  //         Alert.alert("Error", "Unable to read image file, please try again.");
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.error("Error picking image:", error);
+  //     Alert.alert("Error", "There was a problem selecting your image.");
+  //   }
+  // };
 
   const handleSubmit = async () => {
     if (!title || !author){
       Alert.alert("Error", "Please fill in all fields and select a valid image.");
       return;
     }
-
     try {
       setLoading(true);
-
       // Ensure the image has a valid extension
       // const uriParts = image.split(".");
       // const fileType = uriParts[uriParts.length - 1]?.toLowerCase();

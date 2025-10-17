@@ -4,41 +4,32 @@ import {
     FlatList,
     ActivityIndicator,
     RefreshControl,
-    TextInput,
     TouchableOpacity,
     Alert,
   } from "react-native";
   import { useAuthStore } from "../../store/authStore";
-  
-  import { Image } from "expo-image";
   import { useCallback, useEffect, useState } from "react";
-  
   import styles from "../../assets/styles/home.styles";
   import { API_URL } from "../../constants/api";
   import { Ionicons } from "@expo/vector-icons";
-  import { formatPublishDate } from "../../lib/utils";
   import COLORS from "../../constants/colors";
   import Loader from "../../components/Loader";
   import ListHeader from "../../components/ListHeader";
-import { Avatar } from "react-native-paper";
-import { useFocusEffect } from "expo-router";
+  import { useFocusEffect } from "expo-router";
   
   export const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-  
   export default function Home() {
-    const { token, user } = useAuthStore();
+    const { token } = useAuthStore();
     const [readingMaterials, setreadingMaterials] = useState([]);
     const [loading, setLoading] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
     const [page, setPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
     const [searchQuery, setSearchQuery] = useState("");
-    const [selectedCollege, setSelectedCollege] = useState("");
     const fetchReadingMaterials = async (pageNum = 1, refresh = false) => {
       try {
         if (refresh) setRefreshing(true);
         else if (pageNum === 1) setLoading(true);
-    
         const response = await fetch(
           `${API_URL}/reading-materials?approved=false&page=${pageNum}&limit=5&search=${encodeURIComponent(
             searchQuery
@@ -72,7 +63,6 @@ import { useFocusEffect } from "expo-router";
         } else setLoading(false);
       }
     };
-    
   
     useEffect(() => {
         fetchReadingMaterials();
@@ -87,18 +77,15 @@ import { useFocusEffect } from "expo-router";
     useEffect(() => {
       const delayDebounce = setTimeout(() => {
         fetchReadingMaterials(1, true);
-      }, 500); // 500ms delay after typing stops
+      }, 500);
     
       return () => clearTimeout(delayDebounce);
     }, [searchQuery]);
-    
-  
     const handleLoadMore = async () => {
       if (hasMore && !loading && !refreshing) {
         await fetchReadingMaterials(page + 1);
       }
     };
-    
     const handleVote = async (materialId) => {
       try {
         const response = await fetch(`${API_URL}/votes/${materialId}`, {
@@ -126,7 +113,6 @@ import { useFocusEffect } from "expo-router";
         console.log("Vote error:", err);
       }
     };
-
     const handleApprove = async (materialId) => {
       try {
         const response = await fetch(`${API_URL}/reading-materials/${materialId}/approve`, {
@@ -148,7 +134,6 @@ import { useFocusEffect } from "expo-router";
         console.log("Vote error:", err);
       }
     };    
-    
     const renderItem = ({ item }) => (
       <View style={styles.bookCard} key={item._id}>
         {/* Book Details */}
@@ -165,7 +150,6 @@ import { useFocusEffect } from "expo-router";
             <Text style={styles.groupLabel}>Publisher Name:</Text>
             <Text style={styles.groupValue}>{item.author }</Text>
           </View>
-          
           
           <View style={styles.keywordsContainer}>
             <Text style={styles.groupLabel}>Keywords:</Text>
@@ -196,8 +180,6 @@ import { useFocusEffect } from "expo-router";
               )}
             </View>
           </View>
-
-          {/* <Text style={styles.caption}>{item.caption}</Text> */}
         </View>
 
         <View style={styles.voteApproveIcons}>
@@ -216,10 +198,8 @@ import { useFocusEffect } from "expo-router";
               <Text style={{color:COLORS.primary}} >Recommend</Text>
             </TouchableOpacity>
           </View>
-
         </View>
       </View>
-
     );
   
     if (loading) return <Loader />;
