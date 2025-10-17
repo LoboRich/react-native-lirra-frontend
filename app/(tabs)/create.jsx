@@ -24,9 +24,9 @@ import KeywordInputWithSuggestions from "../../components/KeywordInput";
 
 export default function Create() {
   const [title, setTitle] = useState("");
-  const [caption, setCaption] = useState("");
   // const [image, setImage] = useState(null);
   const [keywords, setKeywords] = useState([]);
+  const [subjectTitles, setSubjectTitles] = useState([]);
   const [author, setAuthor] = useState("");
   const [version, setVersion] = useState(null);
   const [edition, setEdition] = useState(null);
@@ -81,7 +81,7 @@ export default function Create() {
   };
 
   const handleSubmit = async () => {
-    if (!title || !caption || !author){
+    if (!title || !author){
       Alert.alert("Error", "Please fill in all fields and select a valid image.");
       return;
     }
@@ -112,9 +112,9 @@ export default function Create() {
         },
         body: JSON.stringify({
           title,
-          caption,
           author,
           keywords,
+          subjectTitles,
           version,
           edition,
           college: user?.college,
@@ -135,8 +135,8 @@ export default function Create() {
 
       Alert.alert("Success", "Your material recommendation has been posted!");
       setTitle("");
-      setCaption("");
       setKeywords([]);
+      setSubjectTitles([]);
       setAuthor("");
       setVersion(null);
       setEdition(null);
@@ -182,25 +182,29 @@ export default function Create() {
               </View>
             </View>
 
-            <View style={{flexDirection: "row", flex: 1, gap: 50}}>
-              <View style={styles.formGroup}>
+            <View style={{flexDirection: "row", flex: 1, gap: 10}}>
+              <View style={[styles.formGroup, {flex: 1}]}>
                 <Text style={styles.label}>Version</Text>
-                <TextInput
-                  keyboardType="numeric"
-                  value={version}
-                  style={styles.input}
-                  onChangeText={setVersion}
-                />
+                <View style={styles.inputContainer}>
+                  <TextInput
+                    keyboardType="numeric"
+                    value={version}
+                    style={styles.input}
+                    onChangeText={setVersion}
+                  />
+                </View>
               </View>
 
-              <View style={styles.formGroup}>
+              <View style={[styles.formGroup, {flex: 1}]}>
                 <Text style={styles.label}>Edition</Text>
-                <TextInput
-                  keyboardType="numeric"
-                  value={edition}
-                  style={styles.input}
-                  onChangeText={setEdition}
-                />
+                <View style={styles.inputContainer}>
+                  <TextInput
+                    keyboardType="numeric"
+                    value={edition}
+                    style={styles.input}
+                    onChangeText={setEdition}
+                  />
+                </View>
               </View>
             </View>
 
@@ -238,24 +242,17 @@ export default function Create() {
                 )}
               </TouchableOpacity>
             </View> */}
-
-            {/* CAPTION */}
-            <View style={styles.formGroup}>
-              <Text style={styles.label}>Description</Text>
-              <TextInput
-                style={styles.textArea}
-                placeholder="Write your review or thoughts about this material..."
-                placeholderTextColor={COLORS.placeholderText}
-                value={caption}
-                onChangeText={setCaption}
-                multiline
-              />
-            </View>
                     
             {/* KEYWORDS */}
             <View style={styles.formGroup}>
               <Text style={styles.label}>Keywords</Text>
-              <KeywordInputWithSuggestions keywords={keywords} setKeywords={setKeywords}/>
+              <KeywordInputWithSuggestions keywords={keywords} setKeywords={setKeywords} placeholder="Enter keywords..."/>
+            </View>
+
+            {/* SUBJECT TITLES */}
+            <View style={styles.formGroup}>
+              <Text style={styles.label}>Subject titles</Text>
+              <KeywordInputWithSuggestions keywords={subjectTitles} setKeywords={setSubjectTitles} placeholder="Enter subject titles..."/>
             </View>
 
             <TouchableOpacity style={styles.button} onPress={handleSubmit} disabled={loading}>

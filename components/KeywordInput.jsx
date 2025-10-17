@@ -9,7 +9,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import COLORS from "../constants/colors";
 
-export default function KeywordInputWithSuggestions({keywords, setKeywords}) {
+export default function KeywordInputWithSuggestions({keywords, setKeywords, placeholder}) {
   const [keyword, setKeyword] = useState("");
 
   const addKeyword = (word = keyword) => {
@@ -35,7 +35,7 @@ export default function KeywordInputWithSuggestions({keywords, setKeywords}) {
       <View style={styles.keywordsContainer}>
         <TextInput
           style={styles.input}
-          placeholder="Add a keyword..."
+          placeholder={placeholder}
           value={keyword}
           onChangeText={handleInputChange}
           onSubmitEditing={() => addKeyword()}
@@ -68,15 +68,17 @@ const styles = StyleSheet.create({
   keywordsContainer: {
     flexDirection: "row",
     alignItems: "center",
+    backgroundColor: COLORS.inputBackground,
+    borderRadius: 12,
     borderWidth: 1,
-    borderColor: "#ddd",
-    borderRadius: 10,
-    paddingHorizontal: 10,
-    paddingVertical: 6,
+    borderColor: COLORS.border,
+    paddingHorizontal: 12,
   },
   input: {
     flex: 1,
-    fontSize: 16,
+    fontSize: 14,
+    height: 48,
+    color: COLORS.textDark,
   },
   addButton: {
     marginLeft: 8,
