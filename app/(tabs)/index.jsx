@@ -185,8 +185,8 @@ import { useFocusEffect } from "expo-router";
           <View style={styles.keywordsContainer}>
             <Text style={styles.groupLabel}>Subject titles: </Text>
             <View style={styles.keywordsPills}>
-              {item.keywords && item.keywords.length > 0 ? (
-                item.keywords.map((keyword, index) => (
+              {item.subjectTitles && item.subjectTitles.length > 0 ? (
+                item.subjectTitles.map((keyword, index) => (
                   <View key={index} style={styles.subjectPill}>
                     <Text style={styles.subjectPillText}>{keyword}</Text>
                   </View>
