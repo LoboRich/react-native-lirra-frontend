@@ -68,6 +68,7 @@ export default function RootLayout() {
           <Stack screenOptions={{ headerShown: false }}>
             <Stack.Screen name="(tabs)" />
             <Stack.Screen name="(auth)" />
+            <Stack.Screen name="wordcloud" options={{ title: "Keywords" }} />
           </Stack>
         </SafeScreen>
         <StatusBar style="dark" />
