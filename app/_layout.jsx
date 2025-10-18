@@ -1,4 +1,4 @@
-import { SplashScreen, Stack, useRouter, useSegments } from "expo-router";
+import { SplashScreen, Stack, Tabs, useRouter, useSegments } from "expo-router";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import SafeScreen from "../components/SafeScreen";
@@ -68,6 +68,7 @@ export default function RootLayout() {
           <Stack screenOptions={{ headerShown: false }}>
             <Stack.Screen name="(tabs)" />
             <Stack.Screen name="(auth)" />
+            <Stack.Screen name="wordcloud" options={{ title: "Keywords" }} />
           </Stack>
         </SafeScreen>
         <StatusBar style="dark" />
