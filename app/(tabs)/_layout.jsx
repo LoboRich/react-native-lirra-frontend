@@ -50,7 +50,7 @@ export default function TabLayout() {
 
 
 
-<Tabs.Screen
+      <Tabs.Screen
         name="approved"
         options={{
           title: "For Procurement",
@@ -92,6 +92,16 @@ export default function TabLayout() {
           ),
         }}
         redirect={user?.role == 'admin'}
+      />
+
+      <Tabs.Screen
+        name="wordcloudscreen"
+        options={{
+          title: "Wordcloud",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="cloud-outline" size={size} color={color} />
+          ),
+        }}
       />
     </Tabs>
   );
