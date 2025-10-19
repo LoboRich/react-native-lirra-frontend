@@ -282,7 +282,7 @@ import {
                 <SegmentedButtons
                   value={filter}
                   onValueChange={(val) => {
-                    if (val === "keywords") router.push("/wordcloud");
+                    if (val === "keywords") router.push("/wordcloudscreen");
                     else setFilter(val);
                   }}
                   buttons={[
