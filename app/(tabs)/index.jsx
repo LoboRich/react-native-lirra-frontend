@@ -283,7 +283,7 @@ import {
                   value={filter}
                   onValueChange={(val) => {
                     if (val === "keywords") router.push("/wordcloudscreen");
-                    else setFilter(val);
+                    setFilter(val);
                   }}
                   buttons={[
                     { value: "new", label: "Newest" },

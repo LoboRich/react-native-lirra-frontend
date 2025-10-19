@@ -261,7 +261,7 @@ export default function Create() {
                     color={COLORS.white}
                     style={styles.buttonIcon}
                   />
-                  <Text style={styles.buttonText}>Suggested</Text>
+                  <Text style={styles.buttonText}>Suggest</Text>
                 </>
               )}
             </TouchableOpacity>
