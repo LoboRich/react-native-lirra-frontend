@@ -9,14 +9,14 @@ import {
     Modal,
   } from "react-native";
   import { useAuthStore } from "../../store/authStore";
-  import { use, useCallback, useEffect, useState } from "react";
+  import { useCallback, useEffect, useState } from "react";
   import styles from "../../assets/styles/home.styles";
   import { API_URL } from "../../constants/api";
   import { Ionicons } from "@expo/vector-icons";
   import COLORS from "../../constants/colors";
   import Loader from "../../components/Loader";
   import ListHeader from "../../components/ListHeader";
-  import { router, useFocusEffect } from "expo-router";
+  import { useFocusEffect } from "expo-router";
   import KeywordInputWithSuggestions from "../../components/KeywordInput";
   import { SegmentedButtons } from "react-native-paper";
   import { useRouter } from "expo-router";
@@ -87,8 +87,7 @@ import {
         }
       }
     };
-       
-  
+
     useEffect(() => {
         fetchReadingMaterials();
     }, []);
@@ -183,29 +182,7 @@ import {
         setSubjectTitles([]);
         setSelectedMaterial(null);
       }
-    };
-    
-    const handleApprove = async (materialId) => {
-      try {
-        const response = await fetch(`${API_URL}/reading-materials/${materialId}/approve`, {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
-    
-        if (!response.ok) {
-          throw new Error("Failed to vote");
-        }
-        Alert.alert("Success", "Book approved successfully");
-        const data = await response.json();
-        await fetchReadingMaterials(1, true);
-        
-      } catch (err) {
-        console.log("Vote error:", err);
-      }
-    };    
+    }; 
     const renderItem = ({ item }) => (
       <View style={styles.bookCard} key={item._id}>
         {/* Book Details */}
