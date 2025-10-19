@@ -34,48 +34,68 @@ import {
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedMaterial, setSelectedMaterial] = useState(null);
     const [subjectTitles, setSubjectTitles] = useState([]);
-    const [filter, setFilter] = useState("new");
-    const fetchReadingMaterials = async (pageNum = 1, refresh = false) => {
+    const [filter, setFilter] = useState("newest");
+    const [keywordFilter, setKeywordFilter] = useState("");
+    const fetchReadingMaterials = async ({
+      pageNum = 1,
+      refresh = false,
+    } = {}) => {
       try {
         if (refresh) setRefreshing(true);
         else if (pageNum === 1) setLoading(true);
-        const response = await fetch(
-          `${API_URL}/reading-materials?approved=false&page=${pageNum}&limit=5&search=${encodeURIComponent(
-            searchQuery
-          )}`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
+    
+        const params = new URLSearchParams({
+          page: pageNum.toString(),
+          limit: "5",
+          search: searchQuery || "",
+          sort: filter,
+        });
+    
+        if (keywordFilter) params.append("keyword", keywordFilter);
+    
+        const response = await fetch(`${API_URL}/reading-materials?${params.toString()}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
     
         const data = await response.json();
         if (!response.ok) throw new Error(data.message || "Failed to fetch reading materials");
     
-        const uniquereadingMaterials =
+        const uniqueReadingMaterials =
           refresh || pageNum === 1
             ? data.readingMaterials
             : Array.from(
-                new Set([...readingMaterials, ...data.readingMaterials].map((book) => book._id))
+                new Set(
+                  [...readingMaterials, ...data.readingMaterials].map((m) => m._id)
+                )
               ).map((id) =>
-                [...readingMaterials, ...data.readingMaterials].find((book) => book._id === id)
+                [...readingMaterials, ...data.readingMaterials].find(
+                  (m) => m._id === id
+                )
               );
     
-        setreadingMaterials(uniquereadingMaterials);
+        setreadingMaterials(uniqueReadingMaterials);
         setHasMore(pageNum < data.totalPages);
         setPage(pageNum);
       } catch (error) {
-        console.log("Error fetching reading Materials", error);
+        console.log("Error fetching reading materials:", error);
       } finally {
         if (refresh) {
           await sleep(800);
           setRefreshing(false);
-        } else setLoading(false);
+        } else {
+          setLoading(false);
+        }
       }
     };
+       
   
     useEffect(() => {
         fetchReadingMaterials();
     }, []);
+
+    useEffect(() => {
+      fetchReadingMaterials({ pageNum: 1, refresh: true });
+    }, [filter, keywordFilter]);
 
     useFocusEffect(
       useCallback(() => {
@@ -85,7 +105,7 @@ import {
 
     useEffect(() => {
       const delayDebounce = setTimeout(() => {
-        fetchReadingMaterials(1, true);
+        fetchReadingMaterials({ pageNum: 1, refresh: true });
       }, 500);
     
       return () => clearTimeout(delayDebounce);
@@ -98,7 +118,7 @@ import {
     },[selectedMaterial])
     const handleLoadMore = async () => {
       if (hasMore && !loading && !refreshing) {
-        await fetchReadingMaterials(page + 1);
+        await fetchReadingMaterials({ pageNum: page + 1 });
       }
     };
     const handleVote = async (materialId, selectedSubjects) => {
@@ -283,10 +303,11 @@ import {
                   value={filter}
                   onValueChange={(val) => {
                     if (val === "keywords") router.push("/wordcloudscreen");
+                    setFilter(null);
                     setFilter(val);
                   }}
                   buttons={[
-                    { value: "new", label: "Newest" },
+                    { value: "newest", label: "Newest" },
                     { value: "popular", label: "Popular" },
                     { value: "keywords", label: "Keywords" },
                   ]}
