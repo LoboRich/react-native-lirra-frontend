@@ -48,19 +48,6 @@ export default function TabLayout() {
         redirect={user?.role == 'admin'}
       />
 
-
-
-      <Tabs.Screen
-        name="approved"
-        options={{
-          title: "For Procurement",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="hourglass-outline" size={size} color={color} />
-          ),
-        }}
-        redirect={user?.role == 'user'}
-      />
-
       <Tabs.Screen
         name="teachers"
         options={{
@@ -98,9 +85,7 @@ export default function TabLayout() {
         name="wordcloudscreen"
         options={{
           title: "Wordcloud",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="cloud-outline" size={size} color={color} />
-          ),
+          href: null,
         }}
       />
     </Tabs>
