@@ -83,24 +83,51 @@ export default function Profile() {
   };
 
   const renderBookItem = ({ item }) => (
-    <View style={styles.bookItem}>
-      <Image source={item.image} style={styles.bookImage} />
-      <View style={styles.bookInfo}>
-        <Text style={styles.bookTitle}>{item.title}</Text>
-        <Text style={styles.bookCaption} numberOfLines={2}>
-          {item.caption}
-        </Text>
-        <Text style={styles.bookDate}>{new Date(item.createdAt).toLocaleDateString()}</Text>
+    <View style={styles.bookCard} key={item._id}>
+      <View style={styles.bookDetails}>
+        <View styele={{flexDirection:"column", flex:1, justifyContent:"space-between", marginBottom:10}}>
+          <Text style={styles.bookTitle}>{item.title}</Text>
+          <View style={{flexDirection:"row", justifyContent:"space-between"}}>
+            { item.version && <Text style={styles.headerSubtitle}>Version: {item.version}</Text>}
+            { item.edition && <Text style={styles.headerSubtitle}>Edition: {item.edition}</Text>}
+          </View>
+        </View>
+
+        <View style={styles.group}>
+          <Text style={styles.groupLabel}>Publisher Name:</Text>
+          <Text style={styles.groupValue}>{item.author }</Text>
+        </View>
+        
+        <View style={styles.keywordsContainer}>
+          <Text style={styles.groupLabel}>Keywords:</Text>
+          <View style={styles.keywordsPills}>
+            {item.keywords && item.keywords.length > 0 ? (
+              item.keywords.map((keyword, index) => (
+                <View key={index} style={styles.keywordPill}>
+                  <Text style={styles.keywordText}>{keyword}</Text>
+                </View>
+              ))
+            ) : (
+              <Text style={styles.noKeywords}>None</Text>
+            )}
+          </View>
+        </View>
+
+        <View style={styles.keywordsContainer}>
+          <Text style={styles.groupLabel}>Subject titles: </Text>
+          <View style={styles.keywordsPills}>
+            {item.subjectTitles && item.subjectTitles.length > 0 ? (
+              item.subjectTitles.map((keyword, index) => (
+                <View key={index} style={styles.subjectPill}>
+                  <Text style={styles.subjectPillText}>{keyword}</Text>
+                </View>
+              ))
+            ) : (
+              <Text style={styles.noKeywords}>None</Text>
+            )}
+          </View>
+        </View>
       </View>
-      { activeTab === "recommendations" && (
-        <TouchableOpacity style={styles.deleteButton} onPress={() => confirmDelete(item._id)}>
-          {deleteBookId === item._id ? (
-            <ActivityIndicator size="small" color={COLORS.primary} />
-          ) : (
-            <Ionicons name="trash-outline" size={20} color={COLORS.primary} />
-          )}
-        </TouchableOpacity>
-      )}
     </View>
   );
   const handleRefresh = async () => {

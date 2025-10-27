@@ -73,16 +73,33 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     marginLeft: 8,
   },
+  bookCard: {
+    backgroundColor: COLORS.cardBackground,
+    borderRadius: 16,
+    marginBottom: 20,
+    padding: 16,
+    shadowColor: COLORS.black,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 3,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+  },
   booksHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     marginBottom: 16,
   },
-  booksTitle: {
-    fontSize: 15,
+  bookDetails: {
+    padding: 4,
+  },
+  bookTitle: {
+    fontSize: 20,
     fontWeight: "700",
     color: COLORS.textPrimary,
+    marginBottom: 6,
   },
   booksCount: {
     fontSize: 14,
@@ -120,6 +137,70 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: COLORS.textPrimary,
     marginBottom: 4,
+  },
+  keywordsContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    flexWrap: "wrap", // allows pills to wrap
+    marginTop: 6,
+  },
+  
+  keywordsPills: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    marginLeft: 6, // small spacing from "Keywords:"
+    flexShrink: 1, // prevents overflow
+  },
+  
+  keywordPill: {
+    backgroundColor: COLORS.textSecondary,
+    borderRadius: 12,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    marginRight: 6,
+    marginBottom: 6,
+  },
+  keywordText: {
+    fontSize: 13,
+    color: COLORS.white,
+    fontWeight: "500",
+  },
+  
+  noKeywords: {
+    fontSize: 13,
+    color: "#888",
+  },
+  group: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 6,
+    gap: 4,
+    marginTop: 10
+  },
+  
+  groupLabel: {
+    fontSize: 14,
+    color: COLORS.textDark,
+    fontWeight: "00",
+  },
+  
+  groupValue: {
+    fontSize: 14,
+    color: COLORS.textPrimary,
+    fontWeight: "700",
+  },
+  subjectPill: {
+    backgroundColor: COLORS.background,
+    borderRadius: 12,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    marginRight: 6,
+    marginBottom: 6,
+  },
+  subjectPillText: {
+    fontSize: 13,
+    color: COLORS.textPrimary,
+    fontWeight: "500",
   },
   ratingContainer: {
     flexDirection: "row",
