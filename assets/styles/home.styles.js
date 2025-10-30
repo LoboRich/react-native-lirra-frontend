@@ -248,7 +248,14 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: COLORS.textPrimary,
     fontWeight: "500",
-  }
+  },
+  filterInfo: {
+    marginTop: 8,
+    marginBottom: 4,
+    fontSize: 14,
+    color: COLORS.textSecondary,
+    fontStyle: "italic",
+  },
   
 });
 

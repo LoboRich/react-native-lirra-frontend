@@ -1,45 +1,37 @@
 import React from "react";
-import { View, Text, Dimensions } from "react-native";
+import { View, Dimensions, StyleSheet } from "react-native";
 import Svg, { Text as SvgText } from "react-native-svg";
-import styles from "../assets/styles/wordcloud.styles";
+import styles from "../assets/styles/wordcloud.styles"; // Make sure this is the correct path
+import { API_URL } from "../constants/api";
+import { useRouter } from "expo-router";
 
-export default function WordCloud({words = []}) {
-  // const words = [
-  //   { text: "Math", count: 20 },
-  //   { text: "Science", count: 6 },
-  //   { text: "Reading", count: 5 },
-  //   { text: "Art", count: 4 },
-  //   { text: "Music", count: 3 },
-  //   { text: "History", count: 3 },
-  //   { text: "Language", count: 2 },
-  //   { text: "Complexity", count: 2 },
-  //   { text: "Organic", count: 3 },
-  //   { text: "Whitening", count: 3 },
-  //   { text: "Renew", count: 2 },
-  //   { text: "Hydration", count: 2 },
-  //   { text: "Brighthening", count: 7 },
-  //   { text: "Firming", count: 6 },
-  //   { text: "Farming", count: 3 },
-  //   { text: "Pesticide", count: 3 },
-  //   { text: "Renew", count: 2 },
-  //   { text: "Copper", count: 2 },
-  // ];
-  const { width } = Dimensions.get("window");
-  const height = 400; // Fixed height for the cloud area
+export default function WordCloud({ words = [], handleWordClick }) {
+  const router = useRouter();
+  const { width, height } = Dimensions.get("window");
   const centerX = width / 2;
   const centerY = height / 2;
 
-  // Scale font sizes
-  const maxCount = Math.max(...words.map((w) => w.count));
-  const scaleFont = (count) => 12 + (count / maxCount) * 28;
+  if (!words.length) return null;
 
-  // Place words around a spiral
+  // --- Sort words by count (descending) ---
+  const sortedWords = [...words].sort((a, b) => b.count - a.count);
+
+  // --- Font scaling ---
+  const maxCount = Math.max(...sortedWords.map((w) => w.count));
+  const minFontSize = 10;  // Smaller font sizes
+  const maxFontSize = 36;  // Smaller maximum font size
+  const scaleFont = (count) =>
+    minFontSize + ((count / maxCount) * (maxFontSize - minFontSize));
+
+  // --- Placed words tracking ---
   const placedWords = [];
+
+  // --- Check for overlap ---
   const isOverlapping = (x, y, fontSize, text) => {
-    const boxWidth = text.length * (fontSize * 0.6);
+    const boxWidth = text.length * (fontSize * 0.5); // Smaller box width for smaller fonts
     const boxHeight = fontSize;
     return placedWords.some((p) => {
-      const pw = p.text.length * (p.fontSize * 0.6);
+      const pw = p.text.length * (p.fontSize * 0.5); // Adjusted size for better overlap detection
       const ph = p.fontSize;
       return !(
         x + boxWidth / 2 < p.x - pw / 2 ||
@@ -50,38 +42,56 @@ export default function WordCloud({words = []}) {
     });
   };
 
-  const getPosition = (i, total, fontSize, text) => {
-    let angle = i * 0.5;
-    let radius = 5;
+  // --- Get a safe position ---
+  const getPosition = (i, fontSize, text) => {
+    let angle = Math.random() * Math.PI * 2;  // Random start angle
+    let radius = 0;
     let x, y;
     let attempts = 0;
+
+    const padding = fontSize * 1.4; // buffer from edges
+    const step = 6;  // spiral step size
 
     do {
       x = centerX + Math.cos(angle) * radius;
       y = centerY + Math.sin(angle) * radius;
 
-      angle += 0.3;
-      radius += 4;
-      attempts++;
-    } while (isOverlapping(x, y, fontSize, text) && attempts < 300);
+      // Check for boundary limits
+      const boxWidth = text.length * (fontSize * 0.5); // Adjusted for smaller fonts
+      const boxHeight = fontSize;
+      const withinBounds =
+        x - boxWidth / 2 > padding &&
+        x + boxWidth / 2 < width - padding &&
+        y - boxHeight / 2 > padding &&
+        y + boxHeight / 2 < height - padding;
 
-    placedWords.push({ x, y, fontSize, text });
-    return { x, y };
+      if (withinBounds && !isOverlapping(x, y, fontSize, text)) {
+        placedWords.push({ x, y, fontSize, text });
+        return { x, y };
+      }
+
+      // Spiral outwards
+      angle += 0.3 + Math.random() * 0.1; // Slight variation in angle
+      radius += step;  // Increase radius to create spacing
+      attempts++;
+    } while (attempts < 800); // max attempts to avoid infinite loop
+
+    // Fallback to center if placement fails
+    return { x: centerX, y: centerY };
   };
 
   return (
     <View style={styles.container}>
-      {/* <Text style={styles.pagetitle}>Teachers</Text> */}
-
-      <Svg width={width - 32} height={height}>
-        {words.map((w, i) => {
-          const fontSize = scaleFont(w.count);
-          const { x, y } = getPosition(i, words.length, fontSize, w.word);
+      <Svg width={width} height={height} viewBox={`0 0 ${width} ${height}`}>
+        {sortedWords.map((w, i) => {
+          const fontSize = scaleFont(w.count);  // Scale font size based on count
+          const { x, y } = getPosition(i, fontSize, w.word);
           const color = `hsl(${Math.random() * 360}, 70%, 45%)`;
 
           return (
             <SvgText
               key={i}
+              onPress={() => handleWordClick(w.word)}
               x={x}
               y={y}
               fill={color}

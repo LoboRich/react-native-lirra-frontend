@@ -5,7 +5,6 @@ import {
     ActivityIndicator,
     RefreshControl,
     TouchableOpacity,
-    Alert,
     Modal,
   } from "react-native";
   import { useAuthStore } from "../../store/authStore";
@@ -16,12 +15,10 @@ import {
   import COLORS from "../../constants/colors";
   import Loader from "../../components/Loader";
   import ListHeader from "../../components/ListHeader";
-  import { useFocusEffect } from "expo-router";
+  import { useFocusEffect, useGlobalSearchParams } from "expo-router";
   import KeywordInputWithSuggestions from "../../components/KeywordInput";
   import { SegmentedButtons } from "react-native-paper";
   import { useRouter } from "expo-router";
-
-  
   export const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
   export default function Home() {
     const { token } = useAuthStore();
@@ -35,7 +32,9 @@ import {
     const [selectedMaterial, setSelectedMaterial] = useState(null);
     const [subjectTitles, setSubjectTitles] = useState([]);
     const [filter, setFilter] = useState("newest");
-    const [keywordFilter, setKeywordFilter] = useState("");
+
+    const { keyword } = useGlobalSearchParams();
+
     const fetchReadingMaterials = async ({
       pageNum = 1,
       refresh = false,
@@ -46,12 +45,12 @@ import {
     
         const params = new URLSearchParams({
           page: pageNum.toString(),
-          limit: "5",
+          limit: "10",
           search: searchQuery || "",
           sort: filter,
         });
     
-        if (keywordFilter) params.append("keyword", keywordFilter);
+        if (keyword) params.append("keyword", keyword);
     
         const response = await fetch(`${API_URL}/reading-materials?${params.toString()}`, {
           headers: { Authorization: `Bearer ${token}` },
@@ -94,7 +93,7 @@ import {
 
     useEffect(() => {
       fetchReadingMaterials({ pageNum: 1, refresh: true });
-    }, [filter, keywordFilter]);
+    }, [filter, keyword]);
 
     useFocusEffect(
       useCallback(() => {
@@ -290,6 +289,7 @@ import {
                   ]}
                 />
               </View>
+              { keyword ? <Text style={styles.filterInfo}>Filtering by keyword: "{keyword}"</Text> : null }
             </View>
           }
           ListFooterComponent={

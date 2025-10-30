@@ -6,12 +6,13 @@ import {
   import styles from "../../assets/styles/for-procurement.styles";
   import { API_URL } from "../../constants/api";
 import WordCloud from "../../components/Wordcloud";
+import { useRouter } from "expo-router";
   
   export default function WordCloudScreen() {
     const [words, setWords] = useState([]);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
-
+    const router = useRouter();
     useEffect(() => {
         const fetchWords = async () => {
           try {
@@ -51,11 +52,15 @@ import WordCloud from "../../components/Wordcloud";
         </View>
       );
     }
+
+    const handleWordClick = (word) => {
+      console.log("Word clicked:", word);
+      router.push(`/?keyword=${encodeURIComponent(word)}`);
+    };
     
-    console.log(words);
     return (
       <View style={styles.container}>
-        <WordCloud words={words}/>
+        <WordCloud words={words} handleWordClick={handleWordClick}/>
       </View>
     );
   }
