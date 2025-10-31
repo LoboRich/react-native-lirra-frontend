@@ -32,7 +32,6 @@ import {
     const [selectedMaterial, setSelectedMaterial] = useState(null);
     const [subjectTitles, setSubjectTitles] = useState([]);
     const [filter, setFilter] = useState("newest");
-
     const { keyword } = useGlobalSearchParams();
 
     const fetchReadingMaterials = async ({
@@ -45,13 +44,15 @@ import {
     
         const params = new URLSearchParams({
           page: pageNum.toString(),
-          limit: "10",
+          limit: "5",
           search: searchQuery || "",
           sort: filter,
         });
-    
-        if (keyword) params.append("keyword", keyword);
-    
+
+        if(filter === "keywords" && keyword !== undefined) {
+          params.append("keyword", keyword);
+        }
+        
         const response = await fetch(`${API_URL}/reading-materials?${params.toString()}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -279,7 +280,6 @@ import {
                   value={filter}
                   onValueChange={(val) => {
                     if (val === "keywords") router.push("/wordcloudscreen");
-                    setFilter(null);
                     setFilter(val);
                   }}
                   buttons={[
