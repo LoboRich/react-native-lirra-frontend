@@ -147,22 +147,24 @@ export default function Profile() {
       {/* YOUR RECOMMENDATIONS */}
       <View style={styles.booksHeader}>
         <Text style={styles.booksTitle}>Your Library Resource Recommendations 📚</Text>
-        {/* <Text style={styles.booksCount}>{books.length} </Text> */}
       </View>
 
       
       <View style={{ flex: 1 }}>
         {/* Tabs Header */}
-        <View style={{ flexDirection: "row", justifyContent: "center" }}>
-          <TouchableOpacity onPress={() => setActiveTab("Suggested")} style={{ padding: 10, flexDirection: "row"}}>
-            <Text style={styles.booksCount}>{activeTab === "Suggested" ? books.length : null} </Text>
-            <Text style={{ color: activeTab === "Suggested" ? "blue" : "gray" }}>Suggested </Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => setActiveTab("Recommended")} style={{ padding: 10, flexDirection: "row"}}>
-            <Text style={styles.booksCount}>{activeTab === "Recommended" ? books.length : null} </Text>
-            <Text style={{ color: activeTab === "Recommended" ? "blue" : "gray" }}>Recommended</Text>
-          </TouchableOpacity>
+        <View style={styles.tabsHeader}>
+          <View style={{ flexDirection: "row", justifyContent: "center" }}>
+            <TouchableOpacity onPress={() => setActiveTab("Suggested")} style={{ padding: 10, flexDirection: "row"}}>
+              <Text style={{ color: activeTab === "Suggested" ? "blue" : "gray" }}>Suggested </Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setActiveTab("Recommended")} style={{ padding: 10, flexDirection: "row"}}>
+              <Text style={{ color: activeTab === "Recommended" ? "blue" : "gray" }}>Recommended</Text>
+            </TouchableOpacity>
+          </View>
+
+          <Text style={styles.booksCount}>{books.length} </Text>
         </View>
+        
 
         <FlatList
             data={books}

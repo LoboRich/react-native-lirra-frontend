@@ -250,6 +250,18 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     fontSize: 14,
   },
+  booksTitle: {
+    fontSize: 14,
+    fontWeight: "700",
+    color: COLORS.textPrimary,
+    marginBottom: 4,
+  },
+  tabsHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 8,
+  },
 });
 
 export default styles;
