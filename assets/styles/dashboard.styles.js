@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: 6,
     borderRadius: 12,
-    backgroundColor: COLORS.cardBackground,
+    backgroundColor: COLORS.primary,
     elevation: 2,
     minHeight: 90,
   },
@@ -28,12 +28,12 @@ const styles = StyleSheet.create({
   statNumber: {
     fontWeight: "700",
     fontSize: 20,
-    color: COLORS.textPrimary,
+    color: COLORS.white,
     textAlign: "center",
   },
   statLabel: {
     textAlign: "center",
-    color: COLORS.textSecondary,
+    color: COLORS.white,
     marginTop: 4,
   },
   chartCard: {
@@ -42,6 +42,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.cardBackground,
     elevation: 2,
     overflow: "hidden",
+    marginVertical: 8,
   },
   chartTitle: {
     marginBottom: 8,
@@ -52,6 +53,10 @@ const styles = StyleSheet.create({
   chart: {
     marginVertical: 8,
     borderRadius: 8,
+    width: "100%",
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 

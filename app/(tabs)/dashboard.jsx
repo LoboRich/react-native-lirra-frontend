@@ -25,11 +25,19 @@ const lineChartData = {
   ],
 };
 
+const wrapLabel = (text, maxChars = 6) => {
+  const regex = new RegExp(`(.{1,${maxChars}})`, "g");
+  return text.match(regex).join("\n");
+};
+
+const labels = ["Java 1st Edition", "Intro to Java", "Java 2nd Edition", "Data Structures", "Algorithms"]
+  .map(l => wrapLabel(l));
+
 const barChartData = {
-  labels: ["Books", "E-books", "Multimedia", "Magazines"],
+  labels: labels,
   datasets: [
     {
-      data: [45, 20, 30, 10],
+      data: [20, 45, 30, 10, 10],
     },
   ],
 };
@@ -48,6 +56,10 @@ export default function Dashboard() {
       r: "4",
       strokeWidth: "2",
       stroke: COLORS.primary,
+    },
+    propsForLabels: {
+      fontSize: 9,
+      textAnchor: "middle",
     },
   };
 
@@ -78,7 +90,7 @@ export default function Dashboard() {
       </View>
 
       {/* Line chart */}
-      <Card style={styles.chartCard}>
+      {/* <Card style={styles.chartCard}>
         <Card.Content>
           <Text style={styles.chartTitle}>Materials Over Time</Text>
           <LineChart
@@ -91,21 +103,39 @@ export default function Dashboard() {
             withInnerLines={false}
           />
         </Card.Content>
-      </Card>
+      </Card> */}
 
       {/* Bar chart */}
       <Card style={styles.chartCard}>
         <Card.Content>
-          <Text style={styles.chartTitle}>Materials by Type</Text>
+          <Text style={styles.chartTitle}>Computer Programming</Text>
           <BarChart
             data={barChartData}
             width={CHART_WIDTH}
             height={CHART_HEIGHT}
             chartConfig={chartConfig}
-            style={styles.chart}
+            style={[styles.chart, { paddingBottom: 16 }]}
             showValuesOnTopOfBars
             fromZero
+            verticalLabelRotation={20}
           />
+        </Card.Content>
+      </Card>
+
+      <Card style={styles.chartCard}>
+        <Card.Content>
+          <Text style={styles.chartTitle}>1. Strongly Recommended Book</Text>
+          <Text style={styles.chartText}>
+            "Intro to Java" by {"John Doe"} was strongly recommended by faculty members across multiple colleges, particularly from the <Text style={{ color: COLORS.primary }}>College of Computer Studies</Text>, reflecting its relevance and alignment with the core academic curriculum.
+          </Text>
+        </Card.Content>
+      </Card>
+      <Card style={styles.chartCard}>
+        <Card.Content>
+          <Text style={styles.chartTitle}>2. Highly Recommended Book</Text>
+          <Text style={styles.chartText}>
+            Highly recommended was “{'Java 2nd Edition'}” by {"Anonymous"}, endorsed by {'30'} faculty members from different institutions — {'20'} from <Text style={{ color: COLORS.primary }}>College of Computer Studies</Text>, and {'10'} from <Text style={{ color: COLORS.primary }}>'College of Information Technolog'</Text>
+          </Text>
         </Card.Content>
       </Card>
        <LogoutButton />
